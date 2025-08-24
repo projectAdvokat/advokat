@@ -53,7 +53,23 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+// admin
 $route['api/admin/users/(:num)/ban']['post']      = 'Api/admin/ban_user/$1';
 $route['api/admin/lawyers/(:num)/verify']['post'] = 'Api/admin/verify_lawyer/$1';
 $route['api/admin/articles/(:num)/ban']['post']   = 'Api/admin/ban_article/$1';
 $route['api/admin/reports/finance']['get']        = 'Api/admin/reports_finance';
+
+// wallet
+
+
+// Ambil saldo wallet user
+$route['api/wallet']['GET'] = 'Api/Wallet/get_wallet';
+
+// Ambil ledger (riwayat transaksi) dengan filter ?from=&to=
+$route['api/wallet/ledger']['GET'] = 'Api/Wallet/get_ledger';
+
+// User request payout (marketer/lawyer)
+$route['api/wallet/payout-request']['POST'] = 'Api/Wallet/request_payout';
+
+// Admin approve payout
+$route['api/wallet/payout/approve']['POST'] = 'Api/Wallet/approve_payout';

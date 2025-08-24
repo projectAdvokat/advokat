@@ -15,7 +15,7 @@ class Admin extends CI_Controller {
 
         
         
-        if ($result) {
+        if ($result > 0) {
             api_response(true, null, "User $id banned");
         } else {
             api_response(false, null, "Failed to ban user $id");
@@ -42,7 +42,7 @@ class Admin extends CI_Controller {
 
         
         // $this->admin_action->create('user', $id, 'ban', 'Violation of terms');
-        if ($result) {
+        if ($result > 0) {
             api_response(true, null, "Article $id banned");
         } else {
             api_response(false, null, "Failed to ban article $id");
