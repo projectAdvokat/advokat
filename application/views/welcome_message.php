@@ -4,97 +4,154 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Welcome to CodeIgniter</title>
-
-	<style type="text/css">
-
-	::selection { background-color: #E13300; color: white; }
-	::-moz-selection { background-color: #E13300; color: white; }
-
-	body {
-		background-color: #fff;
-		margin: 40px;
-		font: 13px/20px normal Helvetica, Arial, sans-serif;
-		color: #4F5155;
-	}
-
-	a {
-		color: #003399;
-		background-color: transparent;
-		font-weight: normal;
-		text-decoration: none;
-	}
-
-	a:hover {
-		color: #97310e;
-	}
-
-	h1 {
-		color: #444;
-		background-color: transparent;
-		border-bottom: 1px solid #D0D0D0;
-		font-size: 19px;
-		font-weight: normal;
-		margin: 0 0 14px 0;
-		padding: 14px 15px 10px 15px;
-	}
-
-	code {
-		font-family: Consolas, Monaco, Courier New, Courier, monospace;
-		font-size: 12px;
-		background-color: #f9f9f9;
-		border: 1px solid #D0D0D0;
-		color: #002166;
-		display: block;
-		margin: 14px 0 14px 0;
-		padding: 12px 10px 12px 10px;
-	}
-
-	#body {
-		margin: 0 15px 0 15px;
-		min-height: 96px;
-	}
-
-	p {
-		margin: 0 0 10px;
-		padding:0;
-	}
-
-	p.footer {
-		text-align: right;
-		font-size: 11px;
-		border-top: 1px solid #D0D0D0;
-		line-height: 32px;
-		padding: 0 10px 0 10px;
-		margin: 20px 0 0 0;
-	}
-
-	#container {
-		margin: 10px;
-		border: 1px solid #D0D0D0;
-		box-shadow: 0 0 8px #D0D0D0;
-	}
-	</style>
+	<title>Advokat Online</title>
+	<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+	<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-base-100">
 
-<div id="container">
-	<h1>Welcome to CodeIgniter!</h1>
-
-	<div id="body">
-		<p>The page you are looking at is being generated dynamically by CodeIgniter.</p>
-
-		<p>If you would like to edit this page you'll find it located at:</p>
-		<code>application/views/welcome_message.php</code>
-
-		<p>The corresponding controller for this page is found at:</p>
-		<code>application/controllers/Welcome.php</code>
-
-		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="userguide3/">User Guide</a>.</p>
-	</div>
-
-	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
+<!-- Hero Section -->
+<div class="hero min-h-screen" style="background-image: url('<?= base_url('assets/images/hero.jpg'); ?>');">
+  <div class="hero-overlay bg-black bg-opacity-60"></div>
+  <div class="hero-content text-center text-neutral-content">
+    <div class="max-w-xl">
+      <h1 class="mb-5 text-5xl font-bold">Konsultasi Hukum Online Dengan Advokat Terpercaya</h1>
+      <p class="mb-5">
+        Solusi hukum cepat, mudah, dan aman langsung dari pengacara berlisensi.
+      </p>
+      <button class="btn btn-success">Mulai Konsultasi</button>
+      <button class="btn btn-outline-light ml-4 bg-co">Cari Lawyer</button>
+    </div>
+  </div>
 </div>
+
+<!-- Why Choose Us -->
+<section class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-10">Kenapa Memilih Kami</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="p-6 bg-base-200 rounded-xl">
+        <div class="text-4xl">✅</div>
+        <h3 class="font-semibold mt-4">Advokat Berlisensi</h3>
+        <p>Semua pengacara terverifikasi</p>
+      </div>
+      <div class="p-6 bg-base-200 rounded-xl">
+        <div class="text-4xl">⚡</div>
+        <h3 class="font-semibold mt-4">Cepat & Mudah</h3>
+        <p>Konsultasi kapan saja, dimana saja</p>
+      </div>
+      <div class="p-6 bg-base-200 rounded-xl">
+        <div class="text-4xl">🔒</div>
+        <h3 class="font-semibold mt-4">Privasi Terjamin</h3>
+        <p>Data Anda aman dan terlindungi</p>
+      </div>
+      <div class="p-6 bg-base-200 rounded-xl">
+        <div class="text-4xl">💬</div>
+        <h3 class="font-semibold mt-4">Multi Channel</h3>
+        <p>Chat, Video Call, atau Telepon</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-16 bg-base-200">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-10">Cara Kerja</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="p-6">
+        <div class="text-4xl mb-4">1️⃣</div>
+        <h3 class="font-semibold">Pilih Advokat</h3>
+        <p>Cari sesuai kebutuhan hukum Anda</p>
+      </div>
+      <div class="p-6">
+        <div class="text-4xl mb-4">2️⃣</div>
+        <h3 class="font-semibold">Atur Jadwal</h3>
+        <p>Pilih waktu yang cocok</p>
+      </div>
+      <div class="p-6">
+        <div class="text-4xl mb-4">3️⃣</div>
+        <h3 class="font-semibold">Mulai Konsultasi</h3>
+        <p>Chat/Telepon/Video call dengan lawyer</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Popular Lawyers -->
+<section class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-10">Lawyer Populer</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="card bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h3 class="font-bold">Anna Wijaya</h3>
+          <p>Pidana</p>
+          <p>⭐⭐⭐⭐⭐</p>
+          <button class="btn btn-sm btn-primary mt-4">Lihat Profil</button>
+        </div>
+      </div>
+      <div class="card bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h3 class="font-bold">Budi Santoso</h3>
+          <p>Perdata</p>
+          <p>⭐⭐⭐⭐⭐</p>
+          <button class="btn btn-sm btn-primary mt-4">Lihat Profil</button>
+        </div>
+      </div>
+      <div class="card bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h3 class="font-bold">Dewi Nurhidayah</h3>
+          <p>Bisnis</p>
+          <p>⭐⭐⭐⭐</p>
+          <button class="btn btn-sm btn-primary mt-4">Lihat Profil</button>
+        </div>
+      </div>
+      <div class="card bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h3 class="font-bold">Rudi Setiawan</h3>
+          <p>Bisnis</p>
+          <p>⭐⭐⭐⭐⭐</p>
+          <button class="btn btn-sm btn-primary mt-4">Lihat Profil</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonial -->
+<section class="py-16 bg-base-200">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-10">Testimoni Klien</h2>
+    <div class="carousel w-full">
+      <div class="carousel-item w-full">
+        <div class="bg-white shadow-lg p-8 rounded-xl">
+          <p>"Pelayanan cepat, lawyer profesional, saya sangat terbantu!"</p>
+          <h4 class="mt-4 font-semibold">- Siti Lestari</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-16 bg-primary text-white text-center">
+  <h2 class="text-3xl font-bold mb-6">Butuh bantuan hukum sekarang juga?</h2>
+  <button class="btn btn-secondary">Konsultasi Sekarang</button>
+</section>
+
+<!-- Footer -->
+<footer class="footer footer-center p-10 bg-base-300 text-base-content">
+  <nav class="grid grid-flow-col gap-4">
+    <a class="link link-hover">Tentang Kami</a>
+    <a class="link link-hover">Syarat & Ketentuan</a>
+    <a class="link link-hover">Privasi</a>
+    <a class="link link-hover">Hubungi Kami</a>
+  </nav>
+  <aside>
+    <p>© 2025 Advokat Online</p>
+  </aside>
+</footer>
 
 </body>
 </html>

@@ -14,10 +14,10 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('welcome_message');
 
-		$users = $this->User_Model->get_all();
+		// $users = $this->User_Model->get_all();
 
-        echo '<pre>';
-        print_r($users);
-        echo '</pre>';
+        // echo '<pre>';
+        // print_r($users);
+        // echo '</pre>';
 	}
 }
