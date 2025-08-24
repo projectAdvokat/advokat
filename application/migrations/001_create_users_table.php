@@ -14,7 +14,8 @@ class Migration_Create_users_table extends CI_Migration {
             'password_hash' => ['type'=>'VARCHAR','constraint'=>255],
             'ref_code' => ['type'=>'VARCHAR','constraint'=>10],
             'referrer_id' => ['type'=>'INT','unsigned'=>TRUE,'null'=>TRUE],
-            'status' => ['type'=>'TINYINT','constraint'=>1,'default'=>1]
+            'status' => ['type'=>'ENUM','constraint'=>['active','banned'],'default'=>'active'],
+            
         ]);
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->create_table('users');

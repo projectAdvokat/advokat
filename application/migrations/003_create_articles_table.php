@@ -13,6 +13,7 @@ class Migration_Create_articles_table extends CI_Migration {
             'cover_url' => ['type'=>'VARCHAR','constraint'=>255,'null'=>TRUE],
             'excerpt' => ['type'=>'TEXT','null'=>TRUE],
             'body' => ['type'=>'TEXT'],
+            'status' => ['type'=>'ENUM','constraint'=>['active','banned'],'default'=>'active'],
             'published_at' => ['type'=>'DATETIME','null'=>TRUE]
         ]);
         $this->dbforge->add_key('id', TRUE);

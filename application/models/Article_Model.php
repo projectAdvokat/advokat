@@ -7,7 +7,7 @@ class Article_Model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
-    }
+}
 
     public function get_by_id($id) {
         return $this->db->get_where($this->table, ['id' => $id])->row_array();
@@ -29,4 +29,5 @@ class Article_Model extends CI_Model {
     public function delete($id) {
         return $this->db->where('id', $id)->delete($this->table);
     }
+       
 }
