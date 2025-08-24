@@ -13,6 +13,32 @@ class User_Model extends CI_Model {
         return $this->db->get_where($this->table, ['id' => $id])->row_array();
     }
 
+    public function exists_with_role($email, $role)
+    {
+        return $this->db->where('email', $email)
+                        ->where('role', $role)
+                        ->count_all_results($this->table) > 0;
+    }
+
+    public function get_by_email_role($email, $role)
+    {
+        return $this->db->where('email', $email)
+                        ->where('role', $role)
+                        ->get($this->table)->row();
+    }
+
+    public function get_by_email($email)
+    {
+        return $this->db->where('email', $email)
+                        ->get($this->table)->row();
+    }
+
+    public function get_by_ref_code($ref_code)
+    {
+        return $this->db->where('ref_code', $ref_code)
+                        ->get($this->table)->row();
+    }
+
     public function get_all() {
         return $this->db->get($this->table)->result_array();
     }
