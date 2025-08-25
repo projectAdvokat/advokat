@@ -13,6 +13,8 @@ class Chat_Model extends CI_Model {
         return $this->db->get_where($this->table, ['id' => $id])->row_array();
     }
 
+    
+
     public function get_all() {
         return $this->db->get($this->table)->result_array();
     }
@@ -29,4 +31,7 @@ class Chat_Model extends CI_Model {
     public function delete($id) {
         return $this->db->where('id', $id)->delete($this->table);
     }
+
+   
 }
+

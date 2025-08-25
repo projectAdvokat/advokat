@@ -20,7 +20,6 @@ class Auth extends CI_Controller {
         $numbers = str_pad(mt_rand(0, 99999), 5, '0', STR_PAD_LEFT);
         return $letters . $numbers;
     }
-
     /**
      * Register user baru
      */

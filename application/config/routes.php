@@ -73,3 +73,8 @@ $route['api/wallet/payout-request']['POST'] = 'Api/Wallet/request_payout';
 
 // Admin approve payout
 $route['api/wallet/payout/approve']['POST'] = 'Api/Wallet/approve_payout';
+
+
+// chat
+$route['api/chats']['GET'] = 'Api/Chat/index';
+$route['api/chats/messages']['POST'] = 'Api/Chat/messages';
