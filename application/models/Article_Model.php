@@ -9,6 +9,32 @@ class Article_Model extends CI_Model {
         parent::__construct();
 }
 
+public function get_by_owner($owner)
+{
+    if ($owner === 'all') {
+        // semua artikel
+        return $this->db->get($this->table)->result_array();
+    }
+
+    if ($owner === 'admin') {
+        // artikel yang dimiliki oleh admin
+        return $this->db->select("{$this->table}.*")
+                        ->from($this->table)
+                        ->join('users', 'users.id = '.$this->table.'.owner_id')
+                        ->where('users.role', 'admin')
+                        ->get()
+                        ->result_array();
+    }
+
+    if ($owner === 'me') {
+        $owner_id = $this->session->userdata('user_id'); // pastikan sudah set session user_id saat login
+        return $this->db->get_where($this->table, ['owner_id' => $owner_id])->result_array();
+    }
+
+    return []; // default kalau parameter tidak sesuai
+}
+
+
     public function get_by_id($id) {
         return $this->db->get_where($this->table, ['id' => $id])->row_array();
     }

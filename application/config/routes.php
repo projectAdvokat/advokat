@@ -78,3 +78,15 @@ $route['api/wallet/payout/approve']['POST'] = 'Api/Wallet/approve_payout';
 // chat
 $route['api/chats']['GET'] = 'Api/Chat/index';
 $route['api/chats/messages']['POST'] = 'Api/Chat/messages';
+
+
+
+// lawyer
+
+$route['api/lawyers']['GET'] = 'Api/Lawyer/index';  
+// $route['api/lawyers/(:num)']['GET'] = 'Api/Lawyer
+
+
+
+// articles
+$route['api/articles']['GET'] = 'Api/Articles/index';  
