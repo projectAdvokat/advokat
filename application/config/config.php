@@ -1,9 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+// if (function_exists('load_dotenv')) {
+//     load_dotenv();
+// }
 
-// Midtrans Configuration
-$config['midtrans_client_key'] = 'Mid-client-C4_SsFo1kDkWCZNB';
-$config['midtrans_server_key'] = 'Mid-server-hpKYAn8qkFbmsFQI0vPRK-QB';
+// // Midtrans Configuration
+// $config['midtrans_client_key'] = env('MIDTRANS_CLIENT_KEY', '');
+// $config['midtrans_server_key'] =  
 
 /*
 |--------------------------------------------------------------------------

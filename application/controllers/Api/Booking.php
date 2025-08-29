@@ -8,6 +8,13 @@ class Booking extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Booking_Model', 'booking');
+         $this->load->helper('env');
+        if (function_exists('load_dotenv')) {
+            load_dotenv();
+        }
+        
+        // Load config midtrans
+        $this->config->load('midtrans');
         $this->load->model('Commission_Model', 'commission');
     }
 

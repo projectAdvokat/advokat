@@ -11,3 +11,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |	https://codeigniter.com/userguide3/general/hooks.html
 |
 */
+
+$hook['pre_system'] = array(
+    'class'    => 'LoadEnvHook',
+    'function' => 'loadEnvironment',
+    'filename' => 'LoadEnvHook.php',
+    'filepath' => 'hooks',
+    'params'   => array()
+);
