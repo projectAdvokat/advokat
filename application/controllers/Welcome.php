@@ -8,6 +8,7 @@ class Welcome extends CI_Controller {
         parent::__construct();
         // Load model User_model
         $this->load->model('User_Model');
+        $this->load->library('session'); // load session
     }
 
 	public function index()

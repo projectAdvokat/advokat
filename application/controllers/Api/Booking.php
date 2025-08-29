@@ -26,8 +26,13 @@ class Booking extends CI_Controller {
     }
 
     public function create() {
-        $data = $this->input->post();
-        if (empty($data)) {
+                 header('Content-Type: application/json');
+
+        // baca body JSON dari fetch()
+        $data = json_decode($this->input->raw_input_stream, true);
+
+
+            if (empty($data)) {
             api_response(false, null, 'No data provided');
             return;
         }

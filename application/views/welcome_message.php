@@ -19,8 +19,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <p class="mb-5">
         Solusi hukum cepat, mudah, dan aman langsung dari pengacara berlisensi.
       </p>
-      <button class="btn btn-success">Mulai Konsultasi</button>
-      <button class="btn btn-outline-light ml-4 bg-co">Cari Lawyer</button>
+      <a href="<?=  $this->session->userdata('user_id') ?'lawyers/list':'login' ?>" class="btn btn-success" >Mulai Konsultasi</a>
+      <!-- <button class="btn btn-outline-light ml-4 bg-co" >Cari Lawyer</button> -->
     </div>
   </div>
 </div>

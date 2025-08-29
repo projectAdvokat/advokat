@@ -18,7 +18,11 @@
 <?= getenv('MIDTRANS_CLIENT_KEY') ?>
 
     <div id="snap-container"></div>
+<?php 
+?>
     
+    
+    <!-- echo $CI->session->userdata('user_name'); -->
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-lg border-0 rounded-3">
@@ -27,10 +31,16 @@
                     <p><strong>Experience:</strong> <?= isset($lawyer['years_experience']) ? $lawyer['years_experience'] : 0; ?> tahun</p>
                     <p><strong>Speciality:</strong> <?= isset($lawyer['specialties']) ? $lawyer['specialties'] : '-'; ?></p>
                     <p class="text-muted"><?= isset($lawyer['bio']) ? $lawyer['bio'] : ''; ?></p>
+                    <?php 
+
+// $CI =& get_instance(); 
+// echo $this->session->userdata('user_');
+?>
+                    
 
                     <form id="bookingForm">
                         <input type="hidden" name="lawyer_id" id="lawyer_id" value="<?= isset($lawyer['user_id']) ? $lawyer['user_id'] : ''; ?>">
-                        
+                        <input type="hidden" name="client_id" id="client_id" value="<?= $this->session->userdata('user_id'); ?>">
                         <div class="mb-3">
                             <label class="form-label">Durasi (menit)</label>
                             <input type="number" name="duration" id="duration" class="form-control" min="30" value="30" required>
@@ -50,6 +60,7 @@ document.getElementById("bookingForm").addEventListener("submit", async function
     e.preventDefault();
 
     const lawyerId = document.getElementById("lawyer_id").value;
+    const clientId = document.getElementById("client_id").value;
     const duration = document.getElementById("duration").value;
     console.log("Lawyer ID:", lawyerId, "Duration:", duration);
 
@@ -69,7 +80,51 @@ document.getElementById("bookingForm").addEventListener("submit", async function
         console.log("Response dari server:", result);
 
         if (result.data) {
-             window.snap.pay(result.data)
+             window.snap.pay(result.data,
+                {
+          onSuccess: async function(result){
+            /*  */
+            console.log(result);
+            const data_booking = {
+                client_id: clientId,
+                lawyer_id: lawyerId,
+                duration_minutes: duration,
+                status:'paid',
+                price_snapshot:150.00
+            };
+          const create_booking = await  fetch('/advokat/api/booking/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data_booking)
+            })
+            
+
+
+            const data = await create_booking.json();
+            console.log(data)
+            if(data){
+                const create_chat = await fetch('/advokat/api/chat/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        client_id: clientId,
+                        booking_id: data.data.id,
+                        lawyer_id: lawyerId
+                    })
+                });
+
+                const chat = await create_chat.json();
+                console.log(chat)
+            }
+            // alert("payment success!"); console.log(result);
+          },
+       
+        }
+             )
 
             // alert("Booking berhasil! Token: " + result.token);
         } else {
