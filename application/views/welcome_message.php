@@ -83,39 +83,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="max-w-6xl mx-auto text-center">
     <h2 class="text-3xl font-bold mb-10">Lawyer Populer</h2>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div class="card bg-base-200 shadow-xl">
-        <div class="card-body">
-          <h3 class="font-bold">Anna Wijaya</h3>
-          <p>Pidana</p>
-          <p>⭐⭐⭐⭐⭐</p>
-          <button class="btn btn-sm btn-primary mt-4">Lihat Profil</button>
-        </div>
-      </div>
-      <div class="card bg-base-200 shadow-xl">
-        <div class="card-body">
-          <h3 class="font-bold">Budi Santoso</h3>
-          <p>Perdata</p>
-          <p>⭐⭐⭐⭐⭐</p>
-          <button class="btn btn-sm btn-primary mt-4">Lihat Profil</button>
-        </div>
-      </div>
-      <div class="card bg-base-200 shadow-xl">
-        <div class="card-body">
-          <h3 class="font-bold">Dewi Nurhidayah</h3>
-          <p>Bisnis</p>
-          <p>⭐⭐⭐⭐</p>
-          <button class="btn btn-sm btn-primary mt-4">Lihat Profil</button>
-        </div>
-      </div>
-      <div class="card bg-base-200 shadow-xl">
-        <div class="card-body">
-          <h3 class="font-bold">Rudi Setiawan</h3>
-          <p>Bisnis</p>
-          <p>⭐⭐⭐⭐⭐</p>
-          <button class="btn btn-sm btn-primary mt-4">Lihat Profil</button>
-        </div>
+  <?php foreach ($lawyers as $lawyer): ?>
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h3 class="font-bold"><?= $lawyer['user_name']; ?></h3>
+        <!-- <p><?= $lawyer['speciality']; ?></p> -->
+       
+        <button class="btn btn-sm btn-primary mt-4">Lihat Profil</button>
       </div>
     </div>
+  <?php endforeach; ?>
+</div>
+
   </div>
 </section>
 

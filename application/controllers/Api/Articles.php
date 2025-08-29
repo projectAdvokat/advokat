@@ -15,7 +15,7 @@ class Articles extends CI_Controller {
             api_response(true, $articles);
 
 
-
+        
 
 
     }

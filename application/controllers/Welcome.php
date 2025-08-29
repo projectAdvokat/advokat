@@ -12,7 +12,9 @@ class Welcome extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('welcome_message');
+        $lawyers = api_get('/api/lawyers?online=1&sort=online')['data'];
+		$this->load->view('welcome_message', ['lawyers' => $lawyers]);
+
 
 		// $users = $this->User_Model->get_all();
 

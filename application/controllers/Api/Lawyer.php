@@ -15,10 +15,7 @@ class Lawyer extends CI_Controller {
         $sort   = $this->input->get('sort');
 
         $lawyers = $this->Lawyer_model->get_all($online, $sort);
-        echo json_encode([
-            'success' => true,
-            'data' => $lawyers
-        ]);
+        api_response(true, $lawyers);
     }
 
     // GET /api/lawyers/:id

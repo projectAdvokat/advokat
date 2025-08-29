@@ -23,6 +23,8 @@ class Auth extends CI_Controller {
     /**
      * Register user baru
      */
+
+        
     public function register()
     {
         $data = json_decode($this->input->raw_input_stream, true);
@@ -41,6 +43,8 @@ class Auth extends CI_Controller {
                 ->set_output(json_encode(['status' => false, 'message' => 'Format email tidak valid']));
             return;
         }
+
+
 
         $domain = substr(strrchr($email, "@"), 1);
 
@@ -111,26 +115,29 @@ class Auth extends CI_Controller {
      */
     public function login()
     {
-        $data = json_decode($this->input->raw_input_stream, true);
+        // input post non json
+            $email = $this->input->post('email');
+    $password = $this->input->post('password');
 
-        if (!$data || !isset($data['email'], $data['password'])) {
+
+        if (!isset($email, $password)) {
             echo json_encode(['status' => false, 'message' => 'Invalid payload']);
             return;
         }
 
-        $user = $this->user->get_by_email($data['email']);
+        $user = $this->user->get_by_email($email);
         if (!$user) {
             echo json_encode(['status' => false, 'message' => 'User tidak ditemukan']);
             return;
         }
 
-        if (!password_verify($data['password'], $user->password_hash)) {
+        if (!password_verify($password, $user->password_hash)) {
             echo json_encode(['status' => false, 'message' => 'Password salah']);
             return;
         }
 
         // Set session login
-        $this->session->set_userdata('user_id', $user->id);
+        $this->session->set_userdata(['user_id' => $user->id, 'user_role' => $user->role, 'user_email' => $user->email, 'user_name' => $user->name]);
 
         echo json_encode([
             'status' => true,
@@ -152,4 +159,6 @@ class Auth extends CI_Controller {
         $this->session->unset_userdata('user_id');
         echo json_encode(['status' => true, 'message' => 'Logout berhasil']);
     }
+
+
 }

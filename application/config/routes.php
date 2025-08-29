@@ -48,10 +48,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
+
 */
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+// login, register, logout
+$route['login']['get']    = 'AuthPage/login';
+$route['register'] = '';
 
 // admin
 $route['api/admin/users/(:num)/ban']['post']      = 'Api/admin/ban_user/$1';
@@ -82,8 +87,9 @@ $route['api/chats/messages']['POST'] = 'Api/Chat/messages';
 
 
 // lawyer
-
-$route['api/lawyers']['GET'] = 'Api/Lawyer/index';  
+$route['lawyers/list'] = 'LawyerPage/index';
+$route['api/lawyers']['GET'] = 'Api/Lawyer/index';
+$route['lawyers/booking/(:num)'] = 'LawyerPage/booking/$1';  
 // $route['api/lawyers/(:num)']['GET'] = 'Api/Lawyer
 
 

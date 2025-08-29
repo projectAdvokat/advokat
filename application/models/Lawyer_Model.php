@@ -10,23 +10,28 @@ class Lawyer_Model extends CI_Model {
     }
 
     public function get_by_id($id) {
-        return $this->db->get_where($this->table, ['id' => $id])->row_array();
+        $this->db->select('lawyers.*, users.name, users.email, users.phone'); // ambil kolom tambahan dari tabel user
+        $this->db->from($this->table);
+        $this->db->join('users', 'users.id = lawyers.user_id', 'left'); // join tabel users
+        $this->db->where('lawyers.user_id', $id);
+        return $this->db->get()->row_array();
+    }
+public function get_all($online = null, $sort = null) {
+    $this->db->select('lawyers.*, users.name as user_name, users.email as user_email'); 
+    $this->db->from('lawyers');
+    $this->db->join('users', 'users.id = lawyers.user_id', 'left'); // relasi lawyer ke user
+
+    if ($online !== null) {
+        $this->db->where('lawyers.is_online', $online); // 0 atau 1
     }
 
-      public function get_all($online = null, $sort = null) {
-        $this->db->select('*');
-        $this->db->from('lawyers');
-
-        if ($online !== null) {
-            $this->db->where('is_online', $online); // 0 atau 1
-        }
-
-        if ($sort === 'online') {
-            $this->db->order_by('is_online', 'DESC');
-        }
-
-        return $this->db->get()->result_array();
+    if ($sort === 'online') {
+        $this->db->order_by('lawyers.is_online', 'DESC');
     }
+
+    return $this->db->get()->result_array();
+}
+
     public function insert($data) {
         $this->db->insert($this->table, $data);
         return $this->db->insert_id();
