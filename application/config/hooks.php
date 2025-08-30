@@ -19,3 +19,11 @@ $hook['pre_system'] = array(
     'filepath' => 'hooks',
     'params'   => array()
 );
+
+
+$hook['post_controller_constructor'][] = array(
+    'class'    => 'AuthHook',
+    'function' => 'checkLogin',
+    'filename' => 'AuthHook.php',
+    'filepath' => 'hooks'
+);

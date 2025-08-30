@@ -10,7 +10,11 @@ class Chats_Model extends CI_Model {
     }
 
     public function get_by_id($id) {
-        return $this->db->get_where($this->table, ['id' => $id])->row_array();
+       $this->db->select('chats.*, bookings.id as booking_id, bookings.duration_minutes ');
+    $this->db->from('chats');
+    $this->db->join('bookings', 'bookings.id = chats.booking_id', 'left');
+    $this->db->where('chats.id', $id);
+    return $this->db->get()->row_array();
     }
 
     

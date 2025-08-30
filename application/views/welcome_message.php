@@ -9,6 +9,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-base-100">
+<!-- Navbar -->
+<div class="navbar bg-transparent shadow">
+  <div class="flex-1">
+    <a href="<?= base_url() ?>" class="btn btn-ghost normal-case text-xl">Advokat Online</a>
+  </div>
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1">
+      <?php if (!$this->session->userdata('user_id')): ?>
+        <!-- Jika belum login -->
+        <li><a href="<?= site_url('login') ?>">Login</a></li>
+        <li><a href="<?= site_url('register') ?>">Register</a></li>
+      <?php else: ?>
+        <!-- Jika sudah login -->
+        
+        <?php if (in_array($this->session->userdata('user_role'), ['admin','lawyer'])): ?>
+          <!-- Dashboard khusus admin & lawyer -->
+          <li><a href="<?= site_url('dashboard') ?>">Dashboard</a></li>
+          <?php else: ?>
+            <li><a   href="<?= site_url('lawyers/list') ?>">Cari Lawyer</a></li>
+        <?php endif; ?>
+
+        <li><a href="<?= site_url('/logout') ?>">Logout</a></li>
+      <?php endif; ?>
+    </ul>
+  </div>
+</div>
 
 <!-- Hero Section -->
 <div class="hero min-h-screen" style="background-image: url('<?= base_url('assets/images/hero.jpg'); ?>');">

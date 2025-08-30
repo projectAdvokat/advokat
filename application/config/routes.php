@@ -84,6 +84,8 @@ $route['api/wallet/payout/approve']['POST'] = 'Api/Wallet/approve_payout';
 $route['api/chats']['GET'] = 'Api/Chat/index';
 $route['api/chats/messages']['POST'] = 'Api/Chat/messages';
 $route['chat/booking/(:num)'] = 'ChatPage/index/$1';
+// $route['api/chats']['POST'] = 'Api/Chat/create';
+$route['api/chats/(:num)/messages']['POST'] = 'Api/Chat/send_messages/$1';
 
 
 
@@ -97,3 +99,8 @@ $route['lawyers/booking/(:num)'] = 'LawyerPage/booking/$1';
 
 // articles
 $route['api/articles']['GET'] = 'Api/Articles/index';  
+$route['dashboard/articles']['GET'] = '/Articles/index';  
+
+
+// dashboard
+$route['dashboard'] = 'Dashboard/index';

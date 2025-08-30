@@ -32,7 +32,7 @@ class Messages_Model extends CI_Model {
     }
 
       public function get_messages_by_booking($booking_id) {
-        $this->db->select('messages.*');
+        $this->db->select('messages.*, chats.start_time, chats.end_time');
         $this->db->from('messages');
         $this->db->join('chats', 'chats.id = messages.chat_id');
         $this->db->where('chats.booking_id', $booking_id);
