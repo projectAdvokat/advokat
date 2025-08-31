@@ -104,8 +104,7 @@ public function create()
               
         $article = $this->article->get_by_id($id);
             api_response(true, $article);
-
-            
+          
     }
 
 }

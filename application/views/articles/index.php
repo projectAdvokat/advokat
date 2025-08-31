@@ -34,7 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <p class="card-text">
                                 <?= character_limiter(strip_tags($article['body']), 100) ?>
                             </p>
-                            <a href="<?= site_url('articles/show/'.$article['id']) ?>" class="btn btn-outline-primary btn-sm">
+                            <a href="<?= site_url('article/detail/'.$article['id']) ?>" class="btn btn-outline-primary btn-sm">
                                 Read More
                             </a>
                             <!-- <a href="<?= site_url('articles/edit/'.$article['id']) ?>" class="btn btn-outline-warning btn-sm">
