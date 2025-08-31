@@ -55,6 +55,8 @@ class AuthPage extends CI_Controller {
                 // redirect sesuai role
                 if ($role === 'lawyer') {
                     redirect('dashboard');
+                } else if ($role === 'client') {
+                    redirect('lawyers/list');
                 }
             } else {
                 // gagal login, tampilkan pesan error
