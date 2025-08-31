@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title><?= isset($title) ? $title : 'Dashboard Lawyer' ?></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dyZbbd1E5CazU5hJ+e2aKaYZ8lvLj/rD7e0cY5NjzyF7rA1/8iZrZ2vFZka9XsV0t5v+UO3k3k6f9o0q6Gzq3A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body { font-family: 'Segoe UI', sans-serif; }

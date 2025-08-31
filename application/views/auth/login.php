@@ -11,7 +11,7 @@
 <div class="card w-96 bg-base-100 shadow-xl">
   <div class="card-body">
     <h2 class="text-2xl font-bold text-center">Login</h2>
-    <form method="post" action="<?= site_url('Api/Auth/login') ?>">
+    <form method="post" action="<?= site_url('AuthPage/filter') ?>">
       <div class="form-control">
         <label class="label">Email</label>
         <input type="email" name="email" class="input input-bordered" required>

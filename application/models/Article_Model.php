@@ -34,6 +34,24 @@ public function get_by_owner($owner)
     return []; // default kalau parameter tidak sesuai
 }
 
+    public function get_by_owner_id($owner_id) {
+        return $this->db->get_where($this->table, ['owner_id' => $owner_id])->result_array();
+    }
+
+    public function count_by_owner($owner_id)
+    {
+        return $this->db->where('owner_id', $owner_id)->count_all_results($this->table);
+    }
+
+    public function get_by_slug($slug)
+    {
+        return $this->db->get_where($this->table, ['slug' => $slug])->row_array();
+    }
+
+    public function delete_by_slug($slug)
+    {
+        return $this->db->where('slug', $slug)->delete($this->table);
+    }
 
     public function get_by_id($id) {
         return $this->db->get_where($this->table, ['id' => $id])->row_array();

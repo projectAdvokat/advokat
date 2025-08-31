@@ -99,8 +99,13 @@ $route['lawyers/booking/(:num)'] = 'LawyerPage/booking/$1';
 
 // articles
 
-$route['api/articles']['GET'] = 'Api/Articles/index';  
-$route['dashboard/articles']['GET'] = 'Dashboard/MyArticles';  
+$route['api/articles']['GET'] = 'Api/Articles/index';
+$route['api/articles/create']['POST'] = 'Api/Articles/create';
+$route['api/articles/delete/(:any)']['GET'] = 'Api/Articles/delete/$1';
+$route['dashboard/articles']['GET'] = 'Dashboard/MyArticles';
+$route['dashboard/articles/create']['GET'] = 'Dashboard/create';
+$route['dashboard/articles/store']['POST'] = 'Dashboard/store';
+$route['dashboard/articles/delete/(:any)']['GET'] = 'Dashboard/delete/$1';
 
 
 // dashboard
