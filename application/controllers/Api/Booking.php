@@ -8,6 +8,7 @@ class Booking extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Booking_Model', 'booking');
+        $this->load->library('session'); // load session
          $this->load->helper('env');
         if (function_exists('load_dotenv')) {
             load_dotenv();
@@ -59,6 +60,9 @@ class Booking extends CI_Controller {
             return;
         }
 
+
+    
+
         $updated = $this->booking->update($id, $data);
         if ($updated) {
             api_response(true, null, 'Booking updated successfully');
@@ -77,6 +81,16 @@ class Booking extends CI_Controller {
 
 
     
+    }
+
+    public function get_by_client($id) {
+        // $client_id = $this->session->userdata('user_id'); // user login
+        //  if (!$client_id) {
+        //     api_response(false, null, 'Unauthorized');
+        //     return;
+        // }
+        $bookings = $this->booking->get_by_client($id);
+        api_response(true, $bookings);
     }
 
     // pay with midtrans
@@ -149,4 +163,5 @@ $snapToken = \Midtrans\Snap::getSnapToken($params);
 api_response(true, $snapToken);
     }
     
+
 }

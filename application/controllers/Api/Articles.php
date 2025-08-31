@@ -13,11 +13,17 @@ class Articles extends CI_Controller {
 
         $articles = $this->article->get_by_owner($owner);
             api_response(true, $articles);
-
-
-        
-
-
     }
+    public function show($id) {
+              
+        $article = $this->article->get_by_id($id);
+            api_response(true, $article);
+
+            
+    }
+
+
+
+    
 
 }

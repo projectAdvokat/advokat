@@ -45,5 +45,8 @@ class Lawyer extends CI_Controller {
         } else {
             echo json_encode(['success' => false, 'message' => 'Lawyer not found']);
         }
+
+
     }
+    
 }

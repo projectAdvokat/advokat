@@ -13,8 +13,9 @@ class LawyerPage extends CI_Controller {
     public function index()
     {
          $lawyers = api_get('/api/lawyers?online=1&sort=online')['data'];
-		
-         $this->load->view('lawyer/list', ['lawyers' => $lawyers]);
+         $client_id = $this->session->userdata('user_id');
+        $current_booking_lawyer = api_get('/api/booking/get_by_client/'.$client_id)['data'];
+         $this->load->view('lawyer/list', ['lawyers' => $lawyers,'current_booking_lawyer'=>$current_booking_lawyer]);
   
     }
 

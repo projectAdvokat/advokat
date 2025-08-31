@@ -29,4 +29,21 @@ class Booking_Model extends CI_Model {
     public function delete($id) {
         return $this->db->where('id', $id)->delete($this->table);
     }
+public function get_by_client($client_id) {
+    $this->db->select('
+        lawyers.user_id as lawyer_id, 
+        lawyers.specialties as lawyer_specialties,
+        users.id as user_id, 
+        users.name as lawyer_name, 
+        users.email as lawyer_email
+    ');
+    $this->db->from('bookings');
+    $this->db->join('lawyers', 'bookings.lawyer_id = lawyers.user_id', 'left');
+    $this->db->join('users', 'lawyers.user_id = users.id', 'left');
+    $this->db->where('bookings.client_id', $client_id);
+    $this->db->distinct(); // supaya unik
+
+    return $this->db->get()->result_array();
+}
+
 }

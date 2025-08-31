@@ -14,6 +14,8 @@ class Chat extends CI_Controller {
     public function index() {
          $booking_id = $this->input->get('booking_id');
 
+         
+
          if (!$booking_id) {
             api_response(false, null, 'booking_id is required');
             return;
@@ -46,29 +48,34 @@ class Chat extends CI_Controller {
         api_response(true, $chat);
     }
 
-    public function send_messages($chat_id) {
-         $sender_id    = $this->session->userdata('user_id'); // login user
-        $text = $this->input->post('text');
-        $this->message->insert([
-            'chat_id' => $chat_id,
-            'sender_id' => $sender_id,
-            'text' => $text,
-            'created_at' => date('Y-m-d H:i:s')
-        ]);
+   public function send_messages($chat_id) {
+    $sender_id = $this->session->userdata('user_id'); // user login
+    $text = $this->input->post('text');
+    $booking_id = $this->input->post('booking_id');
 
-        $chat_session = $this->chat->get_by_id($chat_id);
-        if($sender_id ==  $chat_session['lawyer_id'] && $chat_session['start_time'] == null){
-            
-            $this->chat->update($chat_id, ['start_time' => date('Y-m-d H:i:s'),'end_time'=> date('Y-m-d H:i:s', strtotime($chat_session['duration_minutes'].'minutes'))]);
+    // simpan pesan
+    $this->message->insert([
+        'chat_id'    => $chat_id,
+        'sender_id'  => $sender_id,
+        'text'       => $text,
+        'created_at' => date('Y-m-d H:i:s')
+    ]);
 
-        }
+    // cek apakah chat baru dimulai oleh lawyer
+    $chat_session = $this->chat->get_by_id($chat_id);
+    if ($sender_id == $chat_session['lawyer_id'] && $chat_session['start_time'] == null) {
+        $this->chat->update(
 
-
-        // api_response(true, null, 'message sent');
-
-
-        
-       
-        // api_response(true, null, 'message sent');
+            $chat_id,
+            [
+                'start_time' => date('Y-m-d H:i:s'),
+                'end_time'   => date('Y-m-d H:i:s', strtotime($chat_session['duration_minutes'] . ' minutes'))
+            ]
+        );
     }
+
+    // setelah insert redirect balik ke halaman chat
+    redirect('chat/booking/'.$booking_id);  
+}
+
 }

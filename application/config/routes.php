@@ -100,7 +100,11 @@ $route['lawyers/booking/(:num)'] = 'LawyerPage/booking/$1';
 // articles
 
 $route['api/articles']['GET'] = 'Api/Articles/index';  
+
+$route['api/articles/show/(:num)']['GET'] = 'Api/Articles/show/$1';
 $route['dashboard/articles']['GET'] = 'Dashboard/MyArticles';  
+$route['articles']['GET'] = 'ArticlesPage/index';  
+$route['article/detail/(:num)']['GET'] = 'ArticlesPage/show/$1';  
 
 
 // dashboard
