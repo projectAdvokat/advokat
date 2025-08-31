@@ -9,6 +9,9 @@ class Lawyer_Model extends CI_Model {
         parent::__construct();
     }
 
+
+    
+
     public function get_by_id($id) {
         $this->db->select('lawyers.*, users.name, users.email, users.phone'); // ambil kolom tambahan dari tabel user
         $this->db->from($this->table);
@@ -54,5 +57,23 @@ public function get_all($online = null, $sort = null) {
         $this->db->update('lawyers', ['is_online' => $new_status]);
 
         return $new_status;
+    }
+
+        public function clients($lawyer_id) {
+        // Ambil daftar client yang booking ke lawyer ini
+        $this->db->select('users.id, users.name, users.email, users.phone,bookings.id as id_booking');
+        $this->db->from('bookings');
+        $this->db->join('users', 'users.id = bookings.client_id');
+        $this->db->where('bookings.lawyer_id', $lawyer_id);
+        $this->db->group_by('users.id'); // biar tidak dobel kalau booking berkali-kali
+
+        $clients = $this->db->get()->result();
+
+        // Response JSON
+        echo json_encode([
+            'status' => true,
+            'lawyer_id' => $lawyer_id,
+            'clients' => $clients
+        ]);
     }
 }

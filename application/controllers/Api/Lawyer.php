@@ -48,5 +48,14 @@ class Lawyer extends CI_Controller {
 
 
     }
+
+
+    public function Client($lawyer_id){
+    $client = $this->Lawyer_model->clients($lawyer_id);
+
+    api_response(true,$client);
+        
+
+    }
     
 }

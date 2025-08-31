@@ -144,4 +144,12 @@ class Dashboard extends CI_Controller {
     redirect('dashboard/articles');
 }
 
+
+public function MyClient($client_id){
+
+
+
+
+}
+
 }
