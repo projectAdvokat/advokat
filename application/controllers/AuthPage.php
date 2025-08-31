@@ -19,6 +19,9 @@ class AuthPage extends CI_Controller {
         $this->load->view('auth/register');
     }
 
+
+    
+
     public function filter()
     {
         if ($this->input->method() === 'post') {
