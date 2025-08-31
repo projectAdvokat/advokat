@@ -31,13 +31,38 @@ class Messages_Model extends CI_Model {
         return $this->db->where('id', $id)->delete($this->table);
     }
 
-      public function get_messages_by_booking($booking_id) {
-        $this->db->select('messages.*, chats.start_time, chats.end_time');
-        $this->db->from('messages');
-        $this->db->join('chats', 'chats.id = messages.chat_id');
-        $this->db->where('chats.booking_id', $booking_id);
-        $this->db->order_by('messages.created_at', 'ASC');
-        return $this->db->get()->result_array();
+public function get_messages_by_booking($booking_id) {
+  $chat = $this->db->get_where('chats', ['booking_id' => $booking_id])->row_array();
+    // // ambil pesan sesuai chat_id
+    $messages = $this->db->get_where('messages', ['chat_id' => $chat['id']])->result_array();
+
+     $booking = $this->db->get_where('bookings', ['id' => $booking_id])->row_array();
+        $lawyer = null;
+    $user = null;
+
+    if ($booking && isset($booking['lawyer_id'])) {
+        // ambil lawyer
+        $lawyer = $this->db->get_where('lawyers', ['user_id' => $booking['lawyer_id']])->row_array();
+
+        if ($lawyer && isset($lawyer['user_id'])) {
+            
+            // ambil user dari lawyer
+            $user = $this->db->get_where('users', ['id' => $lawyer['user_id']])->row_array();
+            $lawyer['user'] = $user;
+        }
     }
+
+    // response
+    return [
+        "ok" => true,
+        "data" => [
+            "chat" => $chat,
+            "messages" => $messages,
+            "lawyer" => $lawyer
+        ],
+        "message" => null
+    ];
+}
+
 
 }

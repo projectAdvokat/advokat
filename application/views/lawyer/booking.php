@@ -118,7 +118,14 @@ document.getElementById("bookingForm").addEventListener("submit", async function
                 });
 
                 const chat = await create_chat.json();
-                console.log(chat)
+            
+                // console.log(chat)
+                if(chat){
+                    // alert("Booking dan chat berhasil dibuat! Silakan cek halaman chat.");
+                    window.location.href = '/advokat/chat/booking/'+ chat.booking_id; ;
+                } else {
+                    alert("Gagal membuat chat.");
+                }
             }
             // alert("payment success!"); console.log(result);
           },

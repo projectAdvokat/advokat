@@ -28,9 +28,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <li><a href="<?= site_url('dashboard') ?>">Dashboard</a></li>
           <?php else: ?>
             <li><a   href="<?= site_url('lawyers/list') ?>">Cari Lawyer</a></li>
+         
         <?php endif; ?>
 
-        <li><a href="<?= site_url('/logout') ?>">Logout</a></li>
+        <!-- <li><a href="<?= site_url('/logout') ?>">Logout</a></li> -->
       <?php endif; ?>
     </ul>
   </div>
@@ -123,6 +124,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
   </div>
 </section>
+
+
+<!-- Articles Section -->
+<section class="py-16 bg-base-200">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-10">Artikel Terbaru</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <?php foreach ($latest_articles as $article): ?>
+        <div class="card bg-white shadow-xl">
+          <div class="card-body text-left">
+            <h3 class="font-bold text-lg mb-2"><?= $article['title']; ?></h3>
+            <p class="text-sm text-gray-600 mb-4">
+              <?= character_limiter(strip_tags($article['body']), 100); ?>
+            </p>
+            <a href="<?= site_url('article/detail/'.$article['id']); ?>" class="btn btn-sm btn-primary">
+              Baca Selengkapnya
+            </a>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+
+    <div class="mt-10">
+      <a href="<?= site_url('articles'); ?>" class="btn btn-outline btn-primary">Lihat Semua Artikel</a>
+    </div>
+  </div>
+</section>
+
 
 <!-- Testimonial -->
 <section class="py-16 bg-base-200">

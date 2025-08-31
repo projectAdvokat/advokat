@@ -20,7 +20,7 @@ class Articles extends CI_Controller {
 
     }
 
-    public function create()
+public function create()
     {
         $input = json_decode($this->input->raw_input_stream, true);
         $user_id = $this->session->userdata('user_id') ?? $input['ownerId'];
@@ -100,5 +100,12 @@ class Articles extends CI_Controller {
     }
 }
 
+    public function show($id) {
+              
+        $article = $this->article->get_by_id($id);
+            api_response(true, $article);
+
+            
+    }
 
 }
