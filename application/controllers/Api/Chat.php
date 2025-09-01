@@ -10,6 +10,8 @@ class Chat extends CI_Controller {
         $this->load->library('session'); // load session
         
         $this->load->model('Chats_Model', 'chat');
+        
+        header('Content-Type: application/json');
     }
     public function index() {
          $booking_id = $this->input->get('booking_id');
@@ -78,4 +80,37 @@ class Chat extends CI_Controller {
     redirect('chat/booking/'.$booking_id);  
 }
 
+    public function my_chats() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        api_response(false, null, 'Invalid request method, use POST.');
+        return;
+    }
+
+
+    $input = json_decode($this->input->raw_input_stream, true);
+    $lawyer_id = isset($input['lawyer_id']) ? intval($input['lawyer_id']) : 0;
+
+    if (!$lawyer_id) {
+        api_response(false, null, 'Parameter lawyer_id wajib diisi');
+        return;
+    }
+
+    // validasi benar-benar lawyer
+    $lawyer = $this->db->get_where('users', ['id' => $lawyer_id, 'role' => 'lawyer'])->row_array();
+    if (!$lawyer) {
+        api_response(false, null, 'Lawyer tidak ditemukan atau bukan role lawyer');
+        return;
+    }
+
+    // ambil chat dari model
+    $chats = $this->chat->get_by_lawyer($lawyer_id);
+
+    // tambahin flag expired (jika end_time terisi atau closed_reason ada)
+    foreach ($chats as &$chat) {
+        $chat['expired'] = (!empty($chat['end_time']) || !empty($chat['closed_reason'])) ? true : false;
+    }
+
+    api_response(true, $chats, 'berhasil memuat chats');
+
+    }
 }
