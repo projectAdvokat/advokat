@@ -6,7 +6,7 @@ class Auth extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('User_model', 'user');
+        $this->load->model('User_Model', 'user');
         $this->load->library('session');
         $this->output->set_content_type('application/json');
     }
