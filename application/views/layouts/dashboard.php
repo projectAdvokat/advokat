@@ -38,8 +38,8 @@
        class="<?= ($this->uri->segment(1) == '/dashboard/articles') ? 'active' : '' ?>">Articles</a>
     <a href="<?= base_url('notification') ?>" 
        class="<?= ($this->uri->segment(1) == 'notification') ? 'active' : '' ?>">Notifications</a>
-    <a href="<?= base_url('chat') ?>" 
-       class="<?= ($this->uri->segment(1) == 'chat') ? 'active' : '' ?>">Chat</a>
+    <a href="<?= base_url('/dashboard/chats') ?>" 
+       class="<?= ($this->uri->segment(1) == 'dashboard/chats') ? 'active' : '' ?>">Chat</a>
   </div>
 
   <!-- Content -->

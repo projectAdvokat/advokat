@@ -110,6 +110,7 @@ $route['articles']['GET'] = 'ArticlesPage/index';
 $route['dashboard/articles/store']['POST'] = 'Dashboard/store';
 $route['article/detail/(:num)']['GET'] = 'ArticlesPage/show/$1';  
 $route['dashboard/articles/delete/(:any)']['GET'] = 'Dashboard/delete/$1';
+$route['dashboard/chats']['GET'] = 'Dashboard/chats';
 
 
 // dashboard

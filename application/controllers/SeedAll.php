@@ -158,6 +158,16 @@ class SeedAll extends CI_Controller {
                 'start_time'=>NULL,
                 'end_time'=>NULL,
                 'closed_reason'=>NULL
+            ],
+            [
+                'id'=>1,
+                'booking_id'=>1,
+                'client_id'=>3,
+                'lawyer_id'=>2,
+                'opened_at'=>date('Y-m-d H:i:s'),
+                'start_time'=>date('Y-m-d H:i:s'),
+                'end_time'=>date('Y-m-d H:i:s'),
+                'closed_reason'=>'manual'
             ]
         ];
         foreach($chats as $c){
