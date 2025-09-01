@@ -30,7 +30,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://advokat.japrime.id/';
+
+
+// remote
+// $config['base_url'] = 'https://advokat.japrime.id/';
+
+// local
+$config['base_url'] = 'http://localhost/advokat';
+
+
 
 /*
 |--------------------------------------------------------------------------

@@ -45,7 +45,7 @@ curl_setopt($ch, CURLOPT_URL, 'https://advokat.japrime.id/Api/Auth/login');
                 $role = $result['data']['role'] ?? '';
 
                 // simpan session
-                $this->session->set_userdata([
+                $this->session->set_userdatpa([
                     'user_id'    => $result['data']['id'],
                     'user_email' => $result['data']['email'],
                     'user_role'  => $role
