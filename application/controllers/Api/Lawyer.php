@@ -5,7 +5,7 @@ class Lawyer extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('Lawyer_model');
+        $this->load->model('Lawyer_Model');
         $this->output->set_content_type('application/json');
     }
 
@@ -14,13 +14,13 @@ class Lawyer extends CI_Controller {
         $online = $this->input->get('online');
         $sort   = $this->input->get('sort');
 
-        $lawyers = $this->Lawyer_model->get_all($online, $sort);
+        $lawyers = $this->Lawyer_Model->get_all($online, $sort);
         api_response(true, $lawyers);
     }
 
     // GET /api/lawyers/:id
     public function show($id) {
-        $lawyer = $this->Lawyer_model->get_by_id($id);
+        $lawyer = $this->Lawyer_Model->get_by_id($id);
         if ($lawyer) {
             echo json_encode(['success' => true, 'data' => $lawyer]);
         } else {
@@ -38,7 +38,7 @@ class Lawyer extends CI_Controller {
             return;
         }
 
-        $status = $this->Lawyer_model->toggle_online($lawyer_id);
+        $status = $this->Lawyer_Model->toggle_online($lawyer_id);
 
         if ($status !== false) {
             echo json_encode(['success' => true, 'message' => 'Status updated', 'online' => $status]);
@@ -51,7 +51,7 @@ class Lawyer extends CI_Controller {
 
 
     public function Client($lawyer_id){
-    $client = $this->Lawyer_model->clients($lawyer_id);
+    $client = $this->Lawyer_Model->clients($lawyer_id);
 
     api_response(true,$client);
         

@@ -20,8 +20,6 @@ class AuthPage extends CI_Controller {
     }
 
 
-    
-
     public function filter()
     {
         if ($this->input->method() === 'post') {
@@ -30,7 +28,7 @@ class AuthPage extends CI_Controller {
 
             // kirim ke API Auth/login
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, site_url('Api/Auth/login'));
+curl_setopt($ch, CURLOPT_URL, 'https://advokat.japrime.id/Api/Auth/login');
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
@@ -41,6 +39,7 @@ class AuthPage extends CI_Controller {
             curl_close($ch);
 
             $result = json_decode($response, true);
+
 
             if ($result && isset($result['status']) && $result['status'] === true) {
                 $role = $result['data']['role'] ?? '';
@@ -61,7 +60,7 @@ class AuthPage extends CI_Controller {
             } else {
                 // gagal login, tampilkan pesan error
                 $this->session->set_flashdata('error', $result['message'] ?? 'Login gagal');
-                redirect('authweb/form');
+                redirect('login');
             }
         } else {
             $this->load->view('login'); // default load view login

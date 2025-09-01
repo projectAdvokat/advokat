@@ -69,10 +69,10 @@ $route['api/admin/reports/finance']['get']        = 'Api/admin/reports_finance';
 
 
 // Ambil saldo wallet user
-$route['api/wallet']['GET'] = 'Api/Wallet/get_wallet';
+$route['api/wallet']['GET'] = 'Api/Wallet/index';
 
 // Ambil ledger (riwayat transaksi) dengan filter ?from=&to=
-$route['api/wallet/ledger']['GET'] = 'Api/Wallet/get_ledger';
+$route['api/wallet/ledger']['GET'] = 'Api/Wallet/ledger';
 
 // User request payout (marketer/lawyer)
 $route['api/wallet/payout-request']['POST'] = 'Api/Wallet/request_payout';
