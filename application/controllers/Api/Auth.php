@@ -155,10 +155,11 @@ class Auth extends CI_Controller {
      * Logout
      */
     public function logout()
-    {
-        $this->session->unset_userdata('user_id');
-        echo json_encode(['status' => true, 'message' => 'Logout berhasil']);
-    }
+{
+    $this->session->unset_userdata(['user_id', 'username', 'logged_in']);
+    // echo json_encode(['status' => true, 'message' => 'Logout berhasil']);
+    redirect(base_url('login'));
+}
 
 
 }

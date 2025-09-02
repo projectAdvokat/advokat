@@ -184,7 +184,7 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     
-                                    <a href="<?= site_url('admin/articles/edit/'.$article['id']) ?>" 
+                                    <a href="<?= site_url('dashboard/articles/edit/'.$article['slug']) ?>" 
                                        class="btn btn-sm btn-outline-primary">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             document.getElementById('confirmAction').onclick = function() {
                 // AJAX request to ban/unban article
-                fetch(`<?= base_url('admin/articles/') ?>${isBanAction ? 'ban' : 'unban'}/${articleId}`, {
+                fetch(`<?= base_url('api/admin/') ?>${isBanAction ? 'ban_article' : 'unban_article'}/${articleId}`, {
                     method: 'POST',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',

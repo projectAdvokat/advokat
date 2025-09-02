@@ -57,6 +57,7 @@ $route['translate_uri_dashes'] = FALSE;
 // login, register, logout
 $route['login']['get']    = 'AuthPage/login';
 $route['register']['get']    = 'AuthPage/register';
+$route['logout']['get'] = 'Api/Auth/logout';
 // $route['register'] = '';
 
 // admin

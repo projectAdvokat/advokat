@@ -53,7 +53,7 @@ class Admin extends CI_Controller {
     }
 
     public function ban_article($id) {
-        $result = $this->admin_action->ban_article($id, 'banned'); 
+        $result = $this->admin_action->ban_article($id); 
 
         
         // $this->admin_action->create('user', $id, 'ban', 'Violation of terms');
@@ -65,6 +65,20 @@ class Admin extends CI_Controller {
 
 
         api_response(true, null, "article $id banned");
+    }
+    public function unban_article($id) {
+        $result = $this->admin_action->unban_article($id); 
+
+        
+        // $this->admin_action->create('user', $id, 'ban', 'Violation of terms');
+        if ($result > 0) {
+            api_response(true, null, "Article $id unbanned");
+        } else {
+            api_response(false, null, "Failed to unban article $id");
+        }
+
+
+        api_response(true, null, "article $id  unbanned");
     }
 
      public function reports_finance() {
