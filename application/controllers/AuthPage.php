@@ -45,7 +45,7 @@ class AuthPage extends CI_Controller {
                 $role = $result['data']['role'] ?? '';
 
                 // simpan session
-                $this->session->set_userdatpa([
+                $this->session->set_userdata([
                     'user_id'    => $result['data']['id'],
                     'user_email' => $result['data']['email'],
                     'user_role'  => $role
