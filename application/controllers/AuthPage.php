@@ -28,7 +28,7 @@ class AuthPage extends CI_Controller {
 
             // kirim ke API Auth/login
             $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, 'https://advokat.japrime.id/Api/Auth/login');
+            curl_setopt($ch, CURLOPT_URL, 'https://advokat.japrime.id/Api/Auth/login');
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([

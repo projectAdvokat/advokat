@@ -106,10 +106,13 @@ $route['api/articles/delete/(:any)']['GET'] = 'Api/Articles/delete/$1';
 $route['api/articles/show/(:num)']['GET'] = 'Api/Articles/show/$1';
 $route['dashboard/articles']['GET'] = 'Dashboard/MyArticles';  
 $route['dashboard/articles/create']['GET'] = 'Dashboard/create';
+$route['dashboard/articles/edit/(:any)']['GET'] = 'Dashboard/get_by_slug/$1';
+$route['dashboard/articles/update/(:any)']['POST'] = 'Dashboard/update_article/$1';
 $route['articles']['GET'] = 'ArticlesPage/index';  
 $route['dashboard/articles/store']['POST'] = 'Dashboard/store';
 $route['article/detail/(:num)']['GET'] = 'ArticlesPage/show/$1';  
 $route['dashboard/articles/delete/(:any)']['GET'] = 'Dashboard/delete/$1';
+$route['dashboard/chats']['GET'] = 'Dashboard/chats';
 
 
 // dashboard

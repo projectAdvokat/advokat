@@ -10,6 +10,7 @@ class Articles extends CI_Controller {
         $this->load->helper('text');
         $this->load->library('session');
         $this->output->set_content_type('application/json');
+        
     }
 
     public function index() {
@@ -57,14 +58,50 @@ public function create()
 
         $id = $this->article->insert($article);
 
-        return $this->_response(array_merge(['id' => $id], $article), 201);
+        // return $this->_response(array_merge(['id' => $id], $article), 201);
+        return api_response($article, 'berhasil ambil data articles');
     }
 
-    private function _response($data, $status_code = 200)
+    public function update($id)
     {
-        return $this->output
-            ->set_status_header($status_code)
-            ->set_output(json_encode($data));
+        // --- 1. Coba ambil dari form-data ---
+        $title   = $this->input->post('title');
+        $body    = $this->input->post('body');
+        $excerpt = $this->input->post('excerpt');
+        $cover = $this->input->post('cover_url');
+
+        // --- 2. Kalau kosong, coba ambil dari raw JSON ---
+        if (empty($title) && empty($body)) {
+            $input = json_decode($this->input->raw_input_stream, true);
+
+            if ($input) {
+                $title   = isset($input['title']) ? $input['title'] : null;
+                $body    = isset($input['body']) ? $input['body'] : null;
+                $excerpt = isset($input['excerpt']) ? $input['excerpt'] : null;
+                $cover = isset($input['cover_url']) ? $input['cover_url'] : null;
+            }
+        }
+        $data = [];
+
+        if(empty($title) || $title == '')
+            api_response(false, null, 'kolom title harus ada isinya');
+        
+        if(empty($excerpt) || $excerpt == '')
+            api_response(false, null, 'kolom excerpt harus ada isinya');
+
+        if(empty($body) || $body == '')
+            api_response(false, null, 'tabel body harus ada isinya');
+
+        $data = [
+            'title' => $title,
+            'excerpt' => $excerpt,
+            'body' => $body,
+            'cover_url' => $cover
+        ];
+
+        $result = $this->article->update($id, $data);
+
+        return api_response(true, $data, 'berhasil mengupdate data');
     }
 
     public function delete($slug = null) {
@@ -106,5 +143,14 @@ public function create()
             api_response(true, $article);
           
     }
+
+    public function show_by_slug() {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $slug = $input['slug'];
+        $article = $this->article->get_by_slug($slug);
+        api_response(true, $article);
+          
+    }
+
 
 }
