@@ -92,7 +92,7 @@ function isChatExpired($chat) {
                   <?php else: ?>
                     <div class="d-flex align-items-center">
                       <i class="bi bi-infinity text-secondary me-2"></i>
-                      <small>Tidak ada batas waktu</small>
+                      <small>Belum ada batas waktu</small>
                     </div>
                   <?php endif; ?>
                 </div>
@@ -145,17 +145,7 @@ function isChatExpired($chat) {
               </div>
               
               <div class="card-body">
-                <?php if (!empty($chat['last_message'])): ?>
-                  <p class="card-text text-muted mb-3">
-                    <i class="bi bi-chat-quote me-1"></i>
-                    <?= word_limiter(strip_tags($chat['last_message']), 12); ?>
-                  </p>
-                <?php else: ?>
-                  <p class="card-text text-muted mb-3 fst-italic">
-                    <i class="bi bi-chat me-1"></i>Belum ada pesan
-                  </p>
-                <?php endif; ?>
-
+                
                 <div class="chat-info">
                   <?php if ($start_time): ?>
                     <div class="d-flex align-items-center mb-2">
@@ -218,17 +208,7 @@ function isChatExpired($chat) {
               </div>
               
               <div class="card-body">
-                <?php if (!empty($chat['last_message'])): ?>
-                  <p class="card-text text-muted mb-3">
-                    <i class="bi bi-chat-quote me-1"></i>
-                    <?= word_limiter(strip_tags($chat['last_message']), 12); ?>
-                  </p>
-                <?php else: ?>
-                  <p class="card-text text-muted mb-3 fst-italic">
-                    <i class="bi bi-chat me-1"></i>Belum ada pesan
-                  </p>
-                <?php endif; ?>
-
+                
                 <div class="chat-info">
                   <?php if ($start_time): ?>
                     <div class="d-flex align-items-center mb-2">
@@ -255,7 +235,7 @@ function isChatExpired($chat) {
                   <?php else: ?>
                     <div class="d-flex align-items-center">
                       <i class="bi bi-infinity text-secondary me-2"></i>
-                      <small>Tidak ada batas waktu</small>
+                      <small>Belum ada batas waktu</small>
                     </div>
                   <?php endif; ?>
                 </div>
@@ -282,10 +262,7 @@ function isChatExpired($chat) {
     <div class="text-center py-5">
       <i class="bi bi-chat-dots display-1 text-muted"></i>
       <h3 class="text-muted mt-3">Belum ada room chat</h3>
-      <p class="text-muted">Mulai konsultasi dengan lawyer untuk membuat chat session pertama Anda</p>
-      <a href="<?= site_url('lawyers/list') ?>" class="btn btn-primary mt-3">
-        <i class="bi bi-search me-1"></i> Cari Lawyer
-      </a>
+     
     </div>
   <?php endif; ?>
 </div>
