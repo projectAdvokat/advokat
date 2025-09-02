@@ -338,7 +338,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<!-- Why Choose Us -->
 	<section id="features" class="py-16 bg-white	">
 		<div class="container mx-auto px-4 text-center">
-			<h2 class="text-3xl font-bold  mb-12 section-title">Kenapa Memilih Kami</h2>
+			<h2 class="text-3xl font-bold  mb-12 text-center section-title">Kenapa Memilih Kami</h2>
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<div class="feature-card card bg-base-100 shadow-md border border-gray-100">
 					<div class="card-body items-center text-center p-6">
@@ -382,8 +382,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<!-- How It Works -->
 	<section class="py-16 bg-base-200">
-		<div class="container mx-auto px-4">
-			<h2 class="text-3xl font-bold text-center mb-12 section-title">Cara Kerja</h2>
+		<div class="container mx-auto px-4 text-center">
+			<h2 class="text-3xl font-bold text-center mb-12 section-title ">Cara Kerja</h2>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 				<div class="flex flex-col items-center text-center">
 					<div class="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center mb-4">
@@ -412,7 +412,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<!-- Popular Lawyers -->
 	<section class="py-16 bg-white">
-		<div class="container mx-auto px-4">
+		<div class="container mx-auto px-4 text-center">
 			<h2 class="text-3xl font-bold text-center mb-12 section-title">Lawyer Terpopuler</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 				<?php foreach ($lawyers as $lawyer): ?>
@@ -438,8 +438,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<!-- Articles Section -->
 	<section class="py-16 bg-base-200">
-		<div class="container mx-auto px-4">
-			<h2 class="text-3xl font-bold text-center mb-12 section-title">Artikel Terbaru</h2>
+		<div class="container mx-auto px-4 text-center">
+			<h2 class="text-3xl font-bold text-center mb-12 section-title ">Artikel Terbaru</h2>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 				<?php foreach ($latest_articles as $article): ?>
 				<div class="article-card card bg-white shadow-md border border-gray-100">
@@ -465,7 +465,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<!-- Testimonial -->
 	<section class="py-16 bg-white">
-		<div class="container mx-auto px-4">
+		<div class="container mx-auto px-4 text-center">
 			<h2 class="text-3xl font-bold text-center mb-12 section-title">Apa Kata Klien Kami</h2>
 			<div class="max-w-4xl mx-auto">
 				<div class="testimonial-card text-center">
