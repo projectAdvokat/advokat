@@ -386,23 +386,7 @@
         <h1 class="page-title"><?= isset($page_title) ? $page_title : 'Dashboard' ?></h1>
       </div>
       
-      <div class="header-actions">
-        <div class="notification-badge">
-          <i class="fas fa-bell"></i>
-          <span class="badge">5</span>
-        </div>
-        <div class="dropdown">
-          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-            <i class="fas fa-cog"></i>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="<?= base_url('profile') ?>">Profile</a></li>
-            <li><a class="dropdown-item" href="<?= base_url('settings') ?>">Settings</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="<?= base_url('logout') ?>">Logout</a></li>
-          </ul>
-        </div>
-      </div>
+     
     </div>
     
     <!-- Content Wrapper -->
