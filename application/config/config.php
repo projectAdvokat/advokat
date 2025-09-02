@@ -30,7 +30,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://advokat.japrime.id/';
+
+// dua dua nya jangan di hapus
+// $config['base_url'] = 'https://advokat.japrime.id/';
+
+
+$config['base_url'] = 'http://localhost/advokat';
 
 /*
 |--------------------------------------------------------------------------

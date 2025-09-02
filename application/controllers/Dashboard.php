@@ -44,10 +44,7 @@ class Dashboard extends CI_Controller {
         }
         
         // untuk edit page articles ada di /view/dashboard/my_articles.php
-<<<<<<< HEAD
-=======
-        $this->load->view('layouts/dashboard', ['content' => 'dashboard/articles/my_articles','title' => 'My Articles', 'articles' => $myArticle]);
->>>>>>> 95684aa2412b5084900f5fc037243c65039bb754
+
 
     }
 
@@ -100,54 +97,54 @@ class Dashboard extends CI_Controller {
         $this->load->view('layouts/dashboard', ['content' => 'dashboard/chats', 'chats' => $data['chats']]);
     }
 
-    public function chats(){
-        $this->load->model('Chats_Model');
-        $this->load->helper('api');
+    // public function chats(){
+    //     $this->load->model('Chats_Model');
+    //     $this->load->helper('api');
 
-        $user_id   = $this->session->userdata('user_id');
-        $user_role = $this->session->userdata('user_role');
+    //     $user_id   = $this->session->userdata('user_id');
+    //     $user_role = $this->session->userdata('user_role');
 
-        // hanya lawyer yang bisa akses
-        if (!$user_id || $user_role !== 'lawyer') {
-            $this->session->set_flashdata('error', 'Hanya lawyer yang bisa mengakses roomchat.');
-            redirect('dashboard');
-            return;
-        }
+    //     // hanya lawyer yang bisa akses
+    //     if (!$user_id || $user_role !== 'lawyer') {
+    //         $this->session->set_flashdata('error', 'Hanya lawyer yang bisa mengakses roomchat.');
+    //         redirect('dashboard');
+    //         return;
+    //     }
 
-        // kirim request ke API
-        $url = 'localhost/advokat/Api/Chat/my_chats';
+    //     // kirim request ke API
+    //     $url = 'localhost/advokat/Api/Chat/my_chats';
 
-    // CURL ke API
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-    ]);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['lawyer_id' => $user_id]));
+    // // CURL ke API
+    // $ch = curl_init($url);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    //     'Content-Type: application/json',
+    // ]);
+    // curl_setopt($ch, CURLOPT_POST, true);
+    // curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['lawyer_id' => $user_id]));
 
-    $result = curl_exec($ch);
+    // $result = curl_exec($ch);
 
-    if ($result === false) {
-        $error = curl_error($ch);
-        curl_close($ch);
-        show_error("Curl Error: " . $error);
-        return;
-    }
+    // if ($result === false) {
+    //     $error = curl_error($ch);
+    //     curl_close($ch);
+    //     show_error("Curl Error: " . $error);
+    //     return;
+    // }
 
-    curl_close($ch);
+    // curl_close($ch);
 
-    $response = json_decode($result, true);
+    // $response = json_decode($result, true);
 
-        $data['chats'] = [];
-        if ($response && isset($response['ok']) && $response['ok'] === true) {
-            $data['chats'] = $response['data'];
-        } else {
-            $data['error'] = isset($response['message']) ? $response['message'] : 'Gagal mengambil data chat.';
-        }
+    //     $data['chats'] = [];
+    //     if ($response && isset($response['ok']) && $response['ok'] === true) {
+    //         $data['chats'] = $response['data'];
+    //     } else {
+    //         $data['error'] = isset($response['message']) ? $response['message'] : 'Gagal mengambil data chat.';
+    //     }
 
-        $this->load->view('layouts/dashboard', ['content' => 'dashboard/chats', 'chats' => $data['chats']]);
-    }
+    //     $this->load->view('layouts/dashboard', ['content' => 'dashboard/chats', 'chats' => $data['chats']]);
+    // }
 
     public function create()
     {
