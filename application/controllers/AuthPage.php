@@ -28,7 +28,7 @@ class AuthPage extends CI_Controller {
 
             // kirim ke API Auth/login
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'https://advokat.japrime.id/Api/Auth/login');
+            curl_setopt($ch, CURLOPT_URL, base_url('Api/Auth/login'));
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
@@ -52,7 +52,7 @@ class AuthPage extends CI_Controller {
                 ]);
 
                 // redirect sesuai role
-                if ($role === 'lawyer') {
+                if ($role === 'lawyer' || $role === 'admin') {
                     redirect('dashboard');
                 } else if ($role === 'client') {
                     redirect('lawyers/list');

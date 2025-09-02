@@ -341,6 +341,20 @@
           <span>Dashboard</span>
         </a>
       </li> -->
+
+
+      <?php if ($this->load->session->userdata('user_role')==='admin'):?>
+
+        <li class="sidebar-nav-item">
+          <a href="<?= base_url('dashboard/users') ?>" 
+             class="sidebar-nav-link <?= ($this->uri->segment(2) == 'users') ? 'active' : '' ?>">
+            <i class="fas fa-newspaper"></i>
+            <span>Users</span>
+          </a>
+        </li>
+      
+      <?php endif;?>
+
       <li class="sidebar-nav-item">
         <a href="<?= base_url('dashboard/articles') ?>" 
            class="sidebar-nav-link <?= ($this->uri->segment(2) == 'articles') ? 'active' : '' ?>">
@@ -366,7 +380,7 @@
         </div>
         <div class="user-info">
           <div class="user-name"><?= $this->session->userdata('user_name') ?></div>
-          <div class="user-role">Lawyer</div>
+          <div class="user-role"><?= $this->session->userdata('user_role') ?></div>
         </div>
         <a href="<?= base_url('logout') ?>" class="text-white" title="Logout">
           <i class="fas fa-sign-out-alt"></i>

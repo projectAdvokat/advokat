@@ -60,6 +60,9 @@ $route['register']['get']    = 'AuthPage/register';
 // $route['register'] = '';
 
 // admin
+
+$route['dashboard/users']['get']      = 'Dashboard/AllUsers';
+
 $route['api/admin/users/(:num)/ban']['post']      = 'Api/admin/ban_user/$1';
 $route['api/admin/lawyers/(:num)/verify']['post'] = 'Api/admin/verify_lawyer/$1';
 $route['api/admin/articles/(:num)/ban']['post']   = 'Api/admin/ban_article/$1';
@@ -115,3 +118,4 @@ $route['dashboard/chats']['GET'] = 'Dashboard/chats';
 
 // dashboard
 $route['dashboard'] = 'Dashboard/index';
+

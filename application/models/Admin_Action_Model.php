@@ -79,4 +79,9 @@ class Admin_Action_Model extends CI_Model {
                  ->update('users', ['status' => 'banned']);
         return $this->db->affected_rows();
     }
+      public function unban_user($id) {
+        $this->db->where('id', $id)
+                 ->update('users', ['status' => 'active']);
+        return $this->db->affected_rows();
+    }
 }

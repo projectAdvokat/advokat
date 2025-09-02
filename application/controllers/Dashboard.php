@@ -7,19 +7,43 @@ class Dashboard extends CI_Controller {
         $this->load->library('session'); // ini wajib
         $this->load->helper(['form', 'url']);
     }
+    
+    public function AllUsers(){
+        $this->load->model('User_Model','user');
+        $allUser = $this->user->get_all();
+        $this->load->view('layouts/dashboard', ['content' => 'dashboard/admin/users/index','title' => 'users', 'users' => $allUser]);
+
+
+
+
+
+
+    }
+
 
 
     public function index() {
         $this->load->view('layouts/dashboard', ['content' => 'dashboard/index','title' => 'Dashboard']);
     }
 
+
+
     public function MyArticles(){
         $this->load->model('Article_Model');
         $owner_id = $this->session->userdata('user_id');
+        $user_role = $this->session->userdata('user_role');
         $myArticle = $this->Article_Model->get_by_owner_id($owner_id);
 
+
+        if($user_role==='admin'){
+            $all_articles = api_get('api/articles?owner=all');
+            $this->load->view('layouts/dashboard', ['content' => 'dashboard/admin/articles/index','title' => 'Articles', 'articles' => $all_articles]);
+        }else if($user_role==='lawyer'){
+            $this->load->view('layouts/dashboard', ['content' => 'dashboard/my_articles','title' => 'My Articles', 'articles' => $myArticle]);
+
+        }
+        
         // untuk edit page articles ada di /view/dashboard/my_articles.php
-        $this->load->view('layouts/dashboard', ['content' => 'dashboard/my_articles','title' => 'My Articles', 'articles' => $myArticle]);
 
     }
 

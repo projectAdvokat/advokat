@@ -45,13 +45,22 @@ class Users extends CI_Controller {
     // PUT /users/update/{id}
     public function update($id)
     {
-        $data = json_decode($this->input->raw_input_stream, true);
+      $data = json_decode($this->input->raw_input_stream, true);
 
-        if ($this->user->update($id, $data)) {
-            echo json_encode(['status' => 'success', 'message' => 'User updated']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to update user']);
-        }
+// Ambil hanya field yang diizinkan
+$allowedFields = ['name', 'email', 'phone', 'role'];
+$updateData = array_intersect_key($data, array_flip($allowedFields));
+
+if (!empty($updateData)) {
+    if ($this->user->update($id, $updateData)) {
+        echo json_encode(['status' => 'success', 'message' => 'User updated']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Failed to update user']);
+    }
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'No valid data provided']);
+}
+
     }
 
     // DELETE /users/delete/{id}

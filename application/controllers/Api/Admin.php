@@ -11,7 +11,7 @@ class Admin extends CI_Controller {
     }
 
     public function ban_user($id) {
-        $result = $this->admin_action->ban_user($id, 'banned'); 
+        $result = $this->admin_action->ban_user($id); 
 
         
         
@@ -19,6 +19,21 @@ class Admin extends CI_Controller {
             api_response(true, null, "User $id banned");
         } else {
             api_response(false, null, "Failed to ban user $id");
+        }
+
+                
+        
+
+    }
+    public function unban_user($id) {
+        $result = $this->admin_action->unban_user($id); 
+
+        
+        
+        if ($result > 0) {
+            api_response(true, null, "User $id unbanned");
+        } else {
+            api_response(false, null, "Failed to unban user $id");
         }
 
                 
