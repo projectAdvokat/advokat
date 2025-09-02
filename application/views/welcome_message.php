@@ -17,18 +17,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			--secondary-color: #f0fdf4;
 		}
 
+
+		
 		* {
 			box-sizing: border-box;
 			margin: 0;
 			padding: 0;
 		}
 		
+    
 		body {
 			font-family: 'Inter', sans-serif;
 			line-height: 1.6;
 			color: #1f2937;
 			overflow-x: hidden;
-			padding-top: 76px; /* Height of navbar */
 		}
 		
 		.navbar {
@@ -47,6 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			background: rgba(255, 255, 255, 0.98);
 			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 		}
+		
 		
 		.hero-content {
 			opacity: 0;
@@ -162,11 +165,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			background: var(--primary-color);
 			border-radius: 2px;
 		}
-
-		/* Mobile Menu Styles */
+		
+			/* Mobile Menu Styles */
 		#mobile-menu {
 			position: fixed;
-			top: 76px;
+			top: 70px;
 			left: 0;
 			right: 0;
 			background: white;
@@ -180,8 +183,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			transform: translateY(0);
 		}
 		
+@media (max-width: 768px){
+	navbar {
+				padding: 0.7rem 1rem;
+			}
+}
+
 		/* Responsive adjustments */
-		@media (max-width: 768px) {
+		/* @media (max-width: 768px) {
 			.navbar {
 				padding: 0.7rem 1rem;
 			}
@@ -211,20 +220,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			.section-title {
 				font-size: 1.8rem;
 			}
-			
-			body {
-				padding-top: 70px;
-			}
-			
-			#mobile-menu {
-				top: 70px;
-			}
-		}
+		} */
 	</style>
 </head>
 <body class="bg-base-100">
 	<!-- Navbar -->
-	<nav class="navbar bg-base-100 shadow-md px-4" id="navbar">
+<nav class="navbar bg-base-100 shadow-md px-4" id="navbar">
 		<div class="flex-1">
 			<a href="<?= base_url() ?>" class="btn btn-ghost normal-case text-xl font-bold text-green-700">
 				<i class="fas fa-scale-balanced mr-2"></i>Advokat Online
@@ -307,36 +308,74 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</div>
 
 	<!-- Hero Section -->
-	<section class="hero min-h-screen" style="background-image: url('<?= base_url('assets/images/hero.jpg'); ?>');">
-		<div class="hero-overlay bg-black bg-opacity-60"></div>
-		<div class="hero-content text-center text-neutral-content px-4">
-			<div class="max-w-2xl lg:max-w-3xl xl:max-w-4xl">
-				<h1 class="mb-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-					Konsultasi Hukum Online Dengan Advokat Terpercaya
-				</h1>
-				<p class="mb-8 text-lg sm:text-xl md:text-2xl opacity-90 max-w-2xl mx-auto leading-relaxed">
-					Solusi hukum cepat, mudah, dan aman langsung dari pengacara berlisensi.
-				</p>
-				<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-					<a href="<?= $this->session->userdata('user_id') ? 'lawyers/list' : 'login' ?>" 
-						class="btn btn-success btn-lg sm:btn-wide md:btn-xl rounded-full px-8 py-3 text-sm sm:text-base md:text-lg font-semibold transition-all duration-300 hover:scale-105">
-						<span>Mulai Konsultasi</span>
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-							<path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-						</svg>
-					</a>
-				</div>
-			</div>
-		</div>
-	</section>
+<!-- Hero Section -->
+<section class="hero min-h-screen mt-10" style="background-image: url('<?= base_url('assets/images/hero.jpg'); ?>');">
+  <div class="hero-overlay bg-black bg-opacity-60"></div>
+  <div class="hero-content text-center text-neutral-content px-4">
+    <div class="max-w-2xl lg:max-w-3xl xl:max-w-4xl">
+      <h1 class="mb-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+        Konsultasi Hukum Online Dengan Advokat Terpercaya
+      </h1>
+      <p class="mb-8 text-lg sm:text-xl md:text-2xl opacity-90 max-w-2xl mx-auto leading-relaxed">
+        Solusi hukum cepat, mudah, dan aman langsung dari pengacara berlisensi.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="<?= $this->session->userdata('user_id') ? 'lawyers/list' : 'login' ?>" 
+           class="btn btn-success btn-lg sm:btn-wide md:btn-xl rounded-full px-8 py-3 text-sm sm:text-base md:text-lg font-semibold transition-all duration-300 hover:scale-105">
+          <span>Mulai Konsultasi</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        
+      </div>
+    </div>
+  </div>
+  
+  
+</section>
 
-	<!-- Rest of your content remains the same -->
 	<!-- Why Choose Us -->
-	<section id="features" class="py-16 bg-white">
+	<section id="features" class="py-16 bg-white	">
 		<div class="container mx-auto px-4 text-center">
-			<h2 class="text-3xl font-bold mb-12 section-title">Kenapa Memilih Kami</h2>
+			<h2 class="text-3xl font-bold  mb-12 section-title">Kenapa Memilih Kami</h2>
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-				<!-- Feature cards content -->
+				<div class="feature-card card bg-base-100 shadow-md border border-gray-100">
+					<div class="card-body items-center text-center p-6">
+						<div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+							<i class="fas fa-user-tie text-2xl text-green-600"></i>
+						</div>
+						<h3 class="font-semibold text-lg mb-2">Advokat Berlisensi</h3>
+						<p class="text-gray-600">Semua pengacara terverifikasi dan berpengalaman di bidangnya</p>
+					</div>
+				</div>
+				<div class="feature-card card bg-base-100 shadow-md border border-gray-100">
+					<div class="card-body items-center text-center p-6">
+						<div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+							<i class="fas fa-bolt text-2xl text-green-600"></i>
+						</div>
+						<h3 class="font-semibold text-lg mb-2">Cepat & Mudah</h3>
+						<p class="text-gray-600">Konsultasi kapan saja, dimana saja dengan proses yang sederhana</p>
+					</div>
+				</div>
+				<div class="feature-card card bg-base-100 shadow-md border border-gray-100">
+					<div class="card-body items-center text-center p-6">
+						<div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+							<i class="fas fa-lock text-2xl text-green-600"></i>
+						</div>
+						<h3 class="font-semibold text-lg mb-2">Privasi Terjamin</h3>
+						<p class="text-gray-600">Data Anda aman dan terlindungi dengan enkripsi tingkat tinggi</p>
+					</div>
+				</div>
+				<div class="feature-card card bg-base-100 shadow-md border border-gray-100">
+					<div class="card-body items-center text-center p-6">
+						<div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+							<i class="fas fa-comments text-2xl text-green-600"></i>
+						</div>
+						<h3 class="font-semibold text-lg mb-2">Multi Channel</h3>
+						<p class="text-gray-600">Chat, Video Call, atau Telepon sesuai kenyamanan Anda</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -346,7 +385,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<div class="container mx-auto px-4">
 			<h2 class="text-3xl font-bold text-center mb-12 section-title">Cara Kerja</h2>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-				<!-- How it works content -->
+				<div class="flex flex-col items-center text-center">
+					<div class="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center mb-4">
+						<span class="text-3xl font-bold text-green-600">1</span>
+					</div>
+					<h3 class="font-semibold text-xl mb-3">Pilih Advokat</h3>
+					<p class="text-gray-600">Cari lawyer sesuai kebutuhan hukum Anda dengan spesialisasi yang tepat</p>
+				</div>
+				<div class="flex flex-col items-center text-center">
+					<div class="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center mb-4">
+						<span class="text-3xl font-bold text-green-600">2</span>
+					</div>
+					<h3 class="font-semibold text-xl mb-3">Atur Jadwal</h3>
+					<p class="text-gray-600">Pilih waktu yang cocok untuk konsultasi dengan kalender interaktif</p>
+				</div>
+				<div class="flex flex-col items-center text-center">
+					<div class="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center mb-4">
+						<span class="text-3xl font-bold text-green-600">3</span>
+					</div>
+					<h3 class="font-semibold text-xl mb-3">Mulai Konsultasi</h3>
+					<p class="text-gray-600">Chat/Telepon/Video call dengan lawyer pilihan Anda</p>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -356,7 +415,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<div class="container mx-auto px-4">
 			<h2 class="text-3xl font-bold text-center mb-12 section-title">Lawyer Terpopuler</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-				<!-- Lawyers content -->
+				<?php foreach ($lawyers as $lawyer): ?>
+				<div class="lawyer-card card bg-base-100 shadow-md border border-gray-100">
+					<div class="card-body items-center text-center p-6">
+						<div class="avatar mb-4">
+							<div class="w-24 h-24 rounded-full bg-green-200 flex items-center justify-center">
+								<span class="text-3xl font-bold text-green-700"><?= substr($lawyer['user_name'], 0, 1) ?></span>
+							</div>
+						</div>
+						<h3 class="font-bold text-lg"><?= $lawyer['user_name']; ?></h3>
+						<p class="text-gray-500 text-sm mb-4">Spesialis Hukum</p>
+						<button class="btn btn-outline btn-success btn-sm mt-2">Lihat Profil</button>
+					</div>
+				</div>
+				<?php endforeach; ?>
+			</div>
+			<div class="text-center mt-10">
+				<a href="<?= site_url('lawyers/list') ?>" class="btn btn-success btn-outline">Lihat Semua Lawyer</a>
 			</div>
 		</div>
 	</section>
@@ -366,7 +441,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<div class="container mx-auto px-4">
 			<h2 class="text-3xl font-bold text-center mb-12 section-title">Artikel Terbaru</h2>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-				<!-- Articles content -->
+				<?php foreach ($latest_articles as $article): ?>
+				<div class="article-card card bg-white shadow-md border border-gray-100">
+					<div class="card-body p-6">
+						<h3 class="font-bold text-lg mb-3"><?= $article['title']; ?></h3>
+						<p class="text-gray-600 text-sm mb-4">
+							<?= character_limiter(strip_tags($article['body']), 100); ?>
+						</p>
+						<div class="card-actions justify-end">
+							<a href="<?= site_url('article/detail/'.$article['id']); ?>" class="btn btn-success btn-sm">
+								Baca Selengkapnya
+							</a>
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+			</div>
+			<div class="text-center mt-10">
+				<a href="<?= site_url('articles'); ?>" class="btn btn-success btn-outline">Lihat Semua Artikel</a>
 			</div>
 		</div>
 	</section>
@@ -376,7 +468,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<div class="container mx-auto px-4">
 			<h2 class="text-3xl font-bold text-center mb-12 section-title">Apa Kata Klien Kami</h2>
 			<div class="max-w-4xl mx-auto">
-				<!-- Testimonial content -->
+				<div class="testimonial-card text-center">
+					<div class="rating rating-lg mb-4">
+						<input type="radio" name="rating-10" class="rating-hidden" checked />
+						<input type="radio" name="rating-10" class="mask mask-star-2 bg-white" checked />
+						<input type="radio" name="rating-10" class="mask mask-star-2 bg-white" checked />
+						<input type="radio" name="rating-10" class="mask mask-star-2 bg-white" checked />
+						<input type="radio" name="rating-10" class="mask mask-star-2 bg-white" checked />
+						<input type="radio" name="rating-10" class="mask mask-star-2 bg-white" checked />
+					</div>
+					<p class="text-xl italic mb-6">"Pelayanan sangat cepat, lawyer profesional, dan solusi yang diberikan sangat membantu menyelesaikan masalah hukum saya. Terima kasih Advokat Online!"</p>
+					<div class="flex items-center justify-center">
+						<div class="avatar mr-4">
+							<div class="w-16 h-16 rounded-full bg-white flex items-center justify-center">
+								<span class="text-2xl font-bold text-green-600">SL</span>
+							</div>
+						</div>
+						<div class="text-left">
+							<h4 class="font-semibold">Siti Lestari</h4>
+							<p class="text-green-100">Klien Hukum Keluarga</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -384,27 +497,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<!-- CTA -->
 	<section class="cta-section">
 		<div class="container mx-auto px-4 text-center">
-			<!-- CTA content -->
+			<h2 class="text-3xl font-bold mb-6">Butuh bantuan hukum sekarang juga?</h2>
+			<p class="text-xl mb-8 max-w-2xl mx-auto">Jangan biarkan masalah hukum membebani Anda. Konsultasikan dengan ahli kami sekarang.</p>
+			<a href="<?= $this->session->userdata('user_id') ? 'lawyers/list' : 'register' ?>" class="btn btn-light btn-lg rounded-full px-8">
+				Konsultasi Sekarang <i class="fas fa-arrow-right ml-2"></i>
+			</a>
 		</div>
 	</section>
 
 	<!-- Footer -->
 	<footer class="footer footer-center p-10 bg-base-300 text-base-content">
-		<!-- Footer content -->
+		<nav class="grid grid-flow-col gap-4">
+			<a class="link link-hover">Tentang Kami</a>
+			<a class="link link-hover">Syarat & Ketentuan</a>
+			<a class="link link-hover">Kebijakan Privasi</a>
+			<a class="link link-hover">Hubungi Kami</a>
+		</nav>
+		<nav>
+			<div class="grid grid-flow-col gap-4">
+				<a class="text-2xl"><i class="fab fa-twitter"></i></a>
+				<a class="text-2xl"><i class="fab fa-instagram"></i></a>
+				<a class="text-2xl"><i class="fab fa-facebook"></i></a>
+				<a class="text-2xl"><i class="fab fa-linkedin"></i></a>
+			</div>
+		</nav>
+		<aside>
+			<p>© 2025 Advokat Online. All rights reserved.</p>
+		</aside>
 	</footer>
 
 	<script>
-		// Navbar scroll effect
-		window.addEventListener('scroll', function() {
-			const navbar = document.getElementById('navbar');
-			if (window.scrollY > 50) {
-				navbar.classList.add('navbar-scrolled');
-			} else {
-				navbar.classList.remove('navbar-scrolled');
-			}
-		});
-		
-		// Mobile menu functionality
+
 		document.addEventListener('DOMContentLoaded', function() {
 			const mobileMenuButton = document.getElementById('mobile-menu-button');
 			const mobileMenu = document.getElementById('mobile-menu');
@@ -439,6 +562,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					mobileMenu.classList.add('hidden');
 				}
 			});
+		});
+		// Navbar scroll effect
+		window.addEventListener('scroll', function() {
+			const navbar = document.getElementById('navbar');
+			if (window.scrollY > 50) {
+				navbar.classList.add('navbar-scrolled');
+			} else {
+				navbar.classList.remove('navbar-scrolled');
+			}
 		});
 		
 		// Smooth scrolling for anchor links
