@@ -438,8 +438,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<!-- Articles Section -->
 	<section class="py-16 bg-base-200">
-		<div class="container mx-auto px-4 text-center">
-			<h2 class="text-3xl font-bold text-center mb-12 section-title ">Artikel Terbaru</h2>
+		<div class="container mx-auto px-4 ">
+			<h2 class="text-3xl font-bold text-center mb-12 ">Artikel Terbaru</h2>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 				<?php foreach ($latest_articles as $article): ?>
 				<div class="article-card card bg-white shadow-md border border-gray-100">
