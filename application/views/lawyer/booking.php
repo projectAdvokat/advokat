@@ -334,90 +334,44 @@
     durationInput.addEventListener('input', updatePriceDisplay);
     
     // Form submission
-    bookingForm.addEventListener("submit", async function(e) {
-      e.preventDefault();
-      
-      // Show loading state
-      buttonText.textContent = "Memproses...";
-      loadingSpinner.style.display = "inline-block";
-      submitButton.disabled = true;
-      
-      const lawyerId = document.getElementById("lawyer_id").value;
-      const clientId = document.getElementById("client_id").value;
-      const duration = document.getElementById("duration").value;
+    // Form submission
+bookingForm.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  
+  // Show loading state
+  buttonText.textContent = "Memproses...";
+  loadingSpinner.style.display = "inline-block";
+  submitButton.disabled = true;
+  
+  const lawyerId = document.getElementById("lawyer_id").value;
+  const clientId = document.getElementById("client_id").value;
+  const duration = document.getElementById("duration").value;
 
-      try {
-        const response = await fetch(`/advokat/api/booking/pay/${lawyerId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ duration: duration })
-        });
-
-        const result = await response.json();
-
-        if (result.data) {
-          window.snap.pay(result.data, {
-            onSuccess: async function(result) {
-              const data_booking = {
-                client_id: clientId,
-                lawyer_id: lawyerId,
-                duration_minutes: duration,
-                status: 'paid',
-                price_snapshot: calculatePrice(duration)
-              };
-
-              const create_booking = await fetch('/advokat/api/booking/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data_booking)
-              });
-
-              const data = await create_booking.json();
-              if(data){
-                const create_chat = await fetch('/advokat/api/chat/create', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    client_id: clientId,
-                    booking_id: data.data.id,
-                    lawyer_id: lawyerId
-                  })
-                });
-
-                const chat = await create_chat.json();
-                console.log(chat)
-                if(chat){
-                    // console.log()
-                  window.location.href = '/advokat/chat/booking/'+ chat.data.id;
-                } else {
-                  alert("Gagal membuat chat.");
-                }
-              }
-            },
-            onPending: function(result) {
-              alert("Menunggu pembayaran: " + JSON.stringify(result));
-              resetButtonState();
-            },
-            onError: function(result) {
-              alert("Error pembayaran: " + JSON.stringify(result));
-              resetButtonState();
-            },
-            onClose: function() {
-              alert('Anda menutup popup tanpa menyelesaikan pembayaran');
-              resetButtonState();
-            }
-          });
-        } else {
-          alert("Gagal membuat transaksi.");
-          resetButtonState();
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Terjadi kesalahan saat memproses booking.");
-        resetButtonState();
-      }
+  try {
+    // Step 1: Create payment with Xendit
+    const response = await fetch(`/advokat/api/booking/pay/${lawyerId}`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({ duration: duration })
     });
+
+    const result = await response.json();
     
+    if (result.status === 'success' && result.data) {
+      // Redirect to Xendit payment page
+      window.location.href = result.data;
+    } else {
+      throw new Error(result.message || 'Gagal membuat transaksi');
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Terjadi kesalahan saat memproses booking: " + error.message);
+    resetButtonState();
+  }
+});
     // Reset button state
     function resetButtonState() {
       buttonText.textContent = "Booking & Bayar Sekarang";

@@ -1,5 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$config['xendit_api_key'] = 'xnd_development_MR0fqgZYkcwRmauN0ERP1DWt3SwDkGjF7Wykxl9zbSScFtD5rwxQ8AObSdkvwk'; // API Key dari dashboard Xendit
+
 // if (function_exists('load_dotenv')) {
 //     load_dotenv();
 // }

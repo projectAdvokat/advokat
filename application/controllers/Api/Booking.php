@@ -1,5 +1,8 @@
 <?php
 use Midtrans\Config;
+use Xendit\Configuration;
+use Xendit\Invoice\InvoiceApi;
+use Xendit\Invoice\Invoice;
 use Midtrans\Snap;
 use Midtrans\Notification;
 
@@ -94,74 +97,93 @@ class Booking extends CI_Controller {
     }
 
     // pay with midtrans
-    public function pay($lawyer_id){
-         header('Content-Type: application/json');
+    public function pay($lawyer_id) {
+    header('Content-Type: application/json');
 
-        // baca body JSON dari fetch()
-        $data = json_decode($this->input->raw_input_stream, true);
+    // baca body JSON dari fetch()
+    $data = json_decode($this->input->raw_input_stream, true);
 
-        if (!$lawyer_id || empty($data['duration'])) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Lawyer ID dan durasi harus diisi'
-            ]);
-            return;
-        }
-
-           $lawyer = api_get('/api/lawyer/show/'.$lawyer_id)['data'];
-
-          $quantity = ceil($data['duration'] / 30); 
-
-// harga per 30 menit
-$price = intval($lawyer['price_30m']);
-
-// total harus sama dengan price * quantity
-$total = $price * $quantity;
-        /*Install Midtrans PHP Library (https://github.com/Midtrans/midtrans-php)
-composer require midtrans/midtrans-php
-                              
-Alternatively, if you are not using **Composer**, you can download midtrans-php library 
-(https://github.com/Midtrans/midtrans-php/archive/master.zip), and then require 
-the file manually.   
-
-require_once dirname(__FILE__) . '/pathofproject/Midtrans.php'; */
-
-//SAMPLE REQUEST START HERE
-
-// Set your Merchant Server Key
-Config::$serverKey = $this->config->item('midtrans_server_key');
-// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-Config::$isProduction = false;
-// Set sanitization on (default)
-Config::$isSanitized = true;
-// Set 3DS transaction for credit card to true
-Config::$is3ds = true;
-
-
-$params = array(
-    'transaction_details' => array(
-        'order_id' => rand(),
-        'gross_amount' => $total, // harus sama dengan sum(item_details)
-    ),
-    'item_details' => array(
-        array(
-            'id' => $lawyer_id,
-            'name' => $lawyer['name'] . " - Konsultasi",
-            'price' => $price,  // harga per 30 menit
-            'quantity' => $quantity // jumlah blok 30 menit
-        )
-    ),
-    'customer_details' => array(
-        'first_name' => 'Budi',
-        'last_name' => 'Pratama',
-        'email' => 'budi.pra@example.com',
-        'phone' => '08111222333',
-    ),
-);
-
-$snapToken = \Midtrans\Snap::getSnapToken($params);
-api_response(true, $snapToken);
+    if (!$lawyer_id || empty($data['duration'])) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Lawyer ID dan durasi harus diisi'
+        ]);
+        return;
     }
-    
+
+    $lawyer = api_get('/api/lawyer/show/'.$lawyer_id)['data'];
+    $quantity = ceil($data['duration'] / 30); 
+    $price = intval($lawyer['price_30m']);
+    $total = $price * $quantity;
+
+    // Set Xendit API Key
+    Configuration::setXenditKey($this->config->item('xendit_api_key'));
+
+    try {
+        $params = [
+            'external_id' => 'invoice-' . time() . '-' . $lawyer_id,
+            'payer_email' => $this->session->userdata('user_email') ?? 'customer@example.com',
+            'description' => 'Konsultasi Hukum dengan ' . $lawyer['name'] . ' (' . $data['duration'] . ' menit)',
+            'amount' => $total,
+            'success_redirect_url' => base_url('booking/success'),
+            'failure_redirect_url' => base_url('booking/failure'),
+            'currency' => 'IDR',
+            'items' => [
+                [
+                    'name' => 'Konsultasi Hukum ' . $data['duration'] . ' menit',
+                    'quantity' => $quantity,
+                    'price' => $price,
+                    'category' => 'Legal Services'
+                ]
+            ],
+            'fees' => [
+                [
+                    'type' => 'ADMIN',
+                    'value' => 0 // Sesuaikan jika ada biaya admin
+                ]
+            ]
+        ];
+
+        $apiInstance = new InvoiceApi();
+$create_invoice_request = new Xendit\Invoice\CreateInvoiceRequest($params); // \Xendit\Invoice\CreateInvoiceRequest
+$for_user_id = ""; // string | Business ID of the sub-account merchant (XP feature)
+
+try {
+    $invoice = $apiInstance->createInvoice($create_invoice_request, $for_user_id);
+        // print_r($result);
+} catch (\Xendit\XenditSdkException $e) {
+    echo 'Exception when calling InvoiceApi->createInvoice: ', $e->getMessage(), PHP_EOL;
+    echo 'Full Error: ', json_encode($e->getFullError()), PHP_EOL;
+}
+        // Simpan data invoice ke database (opsional)
+        $booking_data = [
+            'client_id' => $this->session->userdata('user_id'),
+            'lawyer_id' => $lawyer_id,
+            'duration_minutes' => $data['duration'],
+            'total_amount' => $total,
+            'invoice_id' => $invoice['id'],
+            'invoice_url' => $invoice['invoice_url'],
+            'status' => 'pending',
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        
+        // Simpan ke database (sesuaikan dengan model Anda)
+        // $this->booking_model->create($booking_data);
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Invoice berhasil dibuat',
+            'data' => $booking_data
+        ]);
+        
+    } catch (Exception $e) {
+        error_log('Xendit Error: ' . $e->getMessage());
+        
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Terjadi kesalahan saat membuat invoice: ' . $e->getMessage()
+        ]);
+    }
+}
 
 }
