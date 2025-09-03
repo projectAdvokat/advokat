@@ -37,6 +37,8 @@ $config['xendit_api_key'] = 'xnd_development_MR0fqgZYkcwRmauN0ERP1DWt3SwDkGjF7Wy
 // $config['base_url'] = 'https://advokat.japrime.id/';
 
 
+$config['base_url'] = 'https://advokat.japrime.id';
+
 $config['base_url'] = 'http://localhost/advokat';
 
 /*
