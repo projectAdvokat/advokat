@@ -1,31 +1,61 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h2>Articles</h2>
-  <a href="articles/create" class="btn btn-primary">+ Add Article</a>
-</div>
+<div class="container mt-4">
 
-<div class="row">
-  <?php if(!empty($articles)): ?>
-    <?php foreach($articles as $index => $article): ?>
-      <div class="col-md-4">
-        <div class="card p-3 mb-3">
-          <h5><?= $article['title']; ?></h5>
-          <p><?= $article['body']; ?></p>
-          <div class="d-flex gap-1">
-            <!-- Tombol Edit besar dan lebar -->
-            <a href="articles/edit/<?= $article['slug']; ?>" class="btn btn-outline-primary flex-grow-1 py-2">
-              Edit
-            </a>
+  <!-- Header -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-2">
+    <h2 class="mb-0">Articles</h2>
+    <a href="create" class="btn btn-primary">+ Add Article</a>
+  </div>
 
-            <!-- Tombol Hapus dengan ikon -->
-            <form action="delete/<?= $article['slug']; ?>" method="get" onsubmit="return confirm('Are you sure you want to delete this article?');">
-              <button type="submit" class="btn btn-outline-danger d-flex align-items-center justify-content-center px-4 py-2">
-                <i class="fas fa-trash-alt"></i>"></i>
-              </button>
-            </form>
+  <!-- Articles Grid -->
+  <div class="row g-3">
+    <?php if (!empty($articles)): ?>
+      <?php foreach ($articles as $article): ?>
+        <div class="col-12 col-sm-6 col-md-4">
+          <div class="card h-100 shadow-sm">
+            
+            <!-- Cover Image -->
+            <?php if (!empty($article['cover_url'])): ?>
+              <img src="<?= base_url('uploads/articles/'.$article['cover_url']); ?>" 
+                   class="card-img-top" 
+                   style="height: 200px; object-fit: cover;" 
+                   alt="<?= htmlspecialchars($article['title']); ?>">
+            <?php endif; ?>
+            
+            <!-- Card Body -->
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title"><?= htmlspecialchars($article['title']); ?></h5>
+              <p class="card-text text-muted small mb-3">
+                <?= substr(strip_tags($article['excerpt']), 0, 100); ?>...
+              </p>
+
+              <!-- Action Buttons -->
+              <div class="mt-auto d-flex justify-content-between gap-2">
+                <a href="<?= site_url('articles/show/'.$article['id']); ?>" 
+                   class="btn btn-sm btn-primary flex-fill">Baca Selengkapnya</a>
+                
+                <form action="delete/<?= $article['slug']; ?>" 
+                      method="get" 
+                      onsubmit="return confirm('Are you sure you want to delete this article?');"
+                      class="flex-fill">
+                  <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+
           </div>
         </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <div class="col-12">
+        <div class="alert alert-info text-center">Belum ada artikel.</div>
       </div>
-    <?php endforeach; ?>
-  <?php endif; ?>
-</div>
+    <?php endif; ?>
+  </div>
 
+  <!-- Pagination -->
+  <div class="mt-4 d-flex justify-content-center">
+    <?= $pagination; ?>
+  </div>
+</div>
