@@ -9,12 +9,38 @@ class Booking_Model extends CI_Model {
         parent::__construct();
     }
 
+    
+
     public function get_by_id($id) {
         return $this->db->get_where($this->table, ['id' => $id])->row_array();
     }
 
+     public function updateByPgRef($pg_ref, $status)
+    {
+        return $this->db->update(
+            $this->table,
+            ['status' => $status],
+            ['pg_ref' => $pg_ref]
+        );
+    }
+
     public function get_all() {
         return $this->db->get($this->table)->result_array();
+    }
+
+      public function getLastByUser($user_id)
+    {
+        return $this->db->where('client_id', $user_id)
+                        ->order_by('id', 'DESC')
+                        ->limit(1)
+                        ->get('bookings')
+                        ->row();
+    }
+
+
+    public function getByInvoiceId($invoice_id){
+        return $this->db->get_where($this->table, ['pg_ref' => $invoice_id])->row_array();    
+
     }
 
     public function insert($data) {

@@ -11,6 +11,7 @@ class Booking extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Booking_Model', 'booking');
+        $this->load->model('Chats_Model', 'chat_model');
         $this->load->library('session'); // load session
          $this->load->helper('env');
         if (function_exists('load_dotenv')) {
@@ -121,7 +122,7 @@ class Booking extends CI_Controller {
 
     try {
         $params = [
-            'external_id' => 'invoice-' . time() . '-' . $lawyer_id,
+            'external_id' => 'booking-' . time() . '-' . $lawyer_id . '-' . $this->session->userdata('user_id'),
             'payer_email' => $this->session->userdata('user_email') ?? 'customer@example.com',
             'description' => 'Konsultasi Hukum dengan ' . $lawyer['name'] . ' (' . $data['duration'] . ' menit)',
             'amount' => $total,
@@ -135,54 +136,167 @@ class Booking extends CI_Controller {
                     'price' => $price,
                     'category' => 'Legal Services'
                 ]
-            ],
-            'fees' => [
-                [
-                    'type' => 'ADMIN',
-                    'value' => 0 // Sesuaikan jika ada biaya admin
-                ]
             ]
         ];
 
         $apiInstance = new InvoiceApi();
-$create_invoice_request = new Xendit\Invoice\CreateInvoiceRequest($params); // \Xendit\Invoice\CreateInvoiceRequest
-$for_user_id = ""; // string | Business ID of the sub-account merchant (XP feature)
+        $create_invoice_request = new Xendit\Invoice\CreateInvoiceRequest($params);
+        $invoice = $apiInstance->createInvoice($create_invoice_request);
 
-try {
-    $invoice = $apiInstance->createInvoice($create_invoice_request, $for_user_id);
-        // print_r($result);
-} catch (\Xendit\XenditSdkException $e) {
-    echo 'Exception when calling InvoiceApi->createInvoice: ', $e->getMessage(), PHP_EOL;
-    echo 'Full Error: ', json_encode($e->getFullError()), PHP_EOL;
-}
-        // Simpan data invoice ke database (opsional)
-        $booking_data = [
-            'client_id' => $this->session->userdata('user_id'),
-            'lawyer_id' => $lawyer_id,
-            'duration_minutes' => $data['duration'],
-            'total_amount' => $total,
-            'invoice_id' => $invoice['id'],
-            'invoice_url' => $invoice['invoice_url'],
-            'status' => 'pending',
-            'created_at' => date('Y-m-d H:i:s')
-        ];
+        $this->booking->insert([
+    'client_id' => $this->session->userdata('user_id'),
+    'lawyer_id' => $lawyer_id,
+    'duration_minutes' => $data['duration'],
+    'price_snapshot' => $total,
+    'pg_ref' => $invoice['id'], // simpan di pg_ref
+    'status' => 'pending',
+    'created_at' => date('Y-m-d H:i:s')
+]); 
         
-        // Simpan ke database (sesuaikan dengan model Anda)
-        // $this->booking_model->create($booking_data);
 
         echo json_encode([
             'status' => 'success',
             'message' => 'Invoice berhasil dibuat',
-            'data' => $booking_data
+            'data' => [
+                'invoice_url' => $invoice['invoice_url']
+            ]
         ]);
         
     } catch (Exception $e) {
         error_log('Xendit Error: ' . $e->getMessage());
-        
         echo json_encode([
             'status' => 'error',
             'message' => 'Terjadi kesalahan saat membuat invoice: ' . $e->getMessage()
         ]);
+    }
+}
+
+// Webhook handler untuk Xendit (PENTING!)
+public function xendit_webhook() {
+    $raw_input = file_get_contents("php://input");
+    
+    $webhook_data = json_decode($raw_input, true);
+    
+    // Verifikasi signature
+    $callback_token = $this->config->item('xendit_callback_token');
+    $xendit_signature = $_SERVER['HTTP_X_CALLBACK_TOKEN'] ?? '';
+    // var_dump($webhook_data);
+    
+    if ($callback_token && $xendit_signature !== $callback_token) {
+        http_response_code(403);
+        echo 'Invalid callback token';
+        return;
+    }
+    
+    if ($webhook_data['status'] === 'PAID') {
+        
+        $invoice_id = $webhook_data['id'];
+        $external_id = $webhook_data['external_id'];
+        
+        // Parse external_id: booking-{timestamp}-{lawyer_id}-{client_id}
+        $parts = explode('-', $external_id);
+        
+        if (count($parts) >= 4 && $parts[0] === 'booking') {
+            $lawyer_id = $parts[2];
+            $client_id = $parts[3];
+            $amount = $webhook_data['amount'];
+            
+            // 1. BUAT BOOKING (HANYA SETELAH PEMBAYARAN BERHASIL)
+              if ($webhook_data['status'] === 'PAID') {
+
+        $this->booking->updateByPgRef($invoice_id, 'paid');
+      $booking =  $this->booking->getByInvoiceId($invoice_id);
+
+         $chat_data = [
+             'client_id' => $booking->client_id,   // atau ganti kalau nama kolomnya client_id
+        'lawyer_id' => $booking->lawyer_id,
+        'booking_id' => $booking->id,
+            ];
+          
+        
+    }
+
+            // 2. BUAT CHAT SESSION
+            $chat_data = [
+                'client_id' => $client_id,
+                'lawyer_id' => $lawyer_id,
+                'booking_id' => $booking_id,
+                'status' => 'active',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            // $chat_id = $this->chat_model->insert($chat_data);
+            
+            http_response_code(200);
+            echo 'Webhook processed successfully';
+        }
+    }
+}
+
+// Halaman success - Hanya untuk redirect dan checking
+public function success() {
+    $user_id = $this->session->userdata('user_id');
+    // $invoice_id = $this->input->get('invoice_id');
+      $booking = $this->booking->getLastByUser($user_id);
+
+
+
+    
+    
+    // Tampilkan halaman waiting yang akan check status pembayaran
+        if ($booking && $booking->status == 'paid') {
+            
+              $chat_data = [
+             'client_id' => $user_id,   // atau ganti kalau nama kolomnya client_id
+        'lawyer_id' => $booking->lawyer_id,
+        'booking_id' => $booking->id,
+            ];
+          
+                $this->chat_model->insert($chat_data);
+            $this->load->view('booking/success', ['booking' => $booking]);
+        } else {
+            // kalau webhook belum update
+            $this->load->view('booking/waiting', ['booking' => $booking]);
+        }
+    // $this->load->view('booking/waiting', $data);
+}
+
+// API untuk check status pembayaran
+public function check_payment_status($invoice_id) {
+    header('Content-Type: application/json');
+    
+    try {
+        // Get invoice details from Xendit
+        Configuration::setXenditKey($this->config->item('xendit_api_key'));
+        $apiInstance = new InvoiceApi();
+        $invoice = $apiInstance->getInvoiceById($invoice_id);
+        
+        if ($invoice['status'] === 'PAID') {
+            $external_id = $invoice['external_id'];
+            $parts = explode('-', $external_id);
+            
+            if (count($parts) >= 4 && $parts[0] === 'booking') {
+                $lawyer_id = $parts[2];
+                $client_id = $parts[3];
+                
+                // Cari booking yang sudah dibuat oleh webhook
+                $booking = $this->booking->get_by_client_lawyer($client_id, $lawyer_id);
+                
+                if ($booking) {
+                    $chat = $this->chat_model->get_by_booking_id($booking['id']);
+                    echo json_encode([
+                        'status' => 'paid',
+                        'redirect_url' => base_url('chat/booking/' . $chat['id'])
+                    ]);
+                    return;
+                }
+            }
+        }
+        
+        echo json_encode(['status' => $invoice['status']]);
+        
+    } catch (Exception $e) {
+        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
     }
 }
 

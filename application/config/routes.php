@@ -119,6 +119,10 @@ $route['dashboard/articles/delete/(:any)']['GET'] = 'Dashboard/delete/$1';
 $route['dashboard/chats']['GET'] = 'Dashboard/chats';
 
 
-// dashboard
+// dashboard    
+$route['booking/xendit_webhook'] = 'api/booking/xendit_webhook';
+$route['booking/check_payment_status/(:any)'] = 'booking/check_payment_status/$1';
 $route['dashboard'] = 'Dashboard/index';
+
+$route['booking/success'] = 'Api/Booking/success';
 

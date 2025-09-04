@@ -362,7 +362,7 @@ bookingForm.addEventListener("submit", async function(e) {
     
     if (result.status === 'success' && result.data) {
       // Redirect to Xendit payment page
-      window.location.href = result.data;
+      window.location.href = result.data.invoice_url;
     } else {
       throw new Error(result.message || 'Gagal membuat transaksi');
     }
