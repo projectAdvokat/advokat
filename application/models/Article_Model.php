@@ -51,13 +51,29 @@ public function get_by_owner($owner)
     return []; // default kalau parameter tidak sesuai
 }
 
-    public function get_by_owner_id($owner_id) {
-        return $this->db->get_where($this->table, ['owner_id' => $owner_id])->result_array();
+public function get_by_owner_id($owner_id, $limit = null, $offset = null) {
+    if ($limit !== null) {
+        $this->db->limit($limit, $offset);
+    }
+    return $this->db->where('owner_id', $owner_id)
+                    ->order_by('published_at', 'DESC')
+                    ->get('articles')
+                    ->result_array();
+}
+
+public function count_by_owner_id($owner_id) {
+    return $this->db->where('owner_id', $owner_id)->count_all_results('articles');
+}
+
+    public function count_all() {
+        return $this->db->count_all('articles'); // tabel: articles
     }
 
-    public function count_by_owner($owner_id)
-    {
-        return $this->db->where('owner_id', $owner_id)->count_all_results($this->table);
+    public function get_paginated($limit, $offset) {
+        return $this->db->limit($limit, $offset)
+                        ->order_by('created_at', 'DESC')
+                        ->get('articles')
+                        ->result_array();
     }
 
     public function get_by_slug($slug)

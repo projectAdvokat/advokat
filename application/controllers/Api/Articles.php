@@ -34,7 +34,7 @@ public function create()
 
         // Lawyers max 50 articles
         if ($user_role === 'lawyer') {
-            $count = $this->article->count_by_owner($user_id);
+            $count = $this->article->count_by_owner_id($user_id);
             if ($count >= 50) {
                 return $this->_response(['error' => true, 'message' => 'You have reached the maximum of 50 articles.'], 400);
             }

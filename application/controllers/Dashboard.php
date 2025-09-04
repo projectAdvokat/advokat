@@ -26,27 +26,110 @@ class Dashboard extends CI_Controller {
         $this->load->view('layouts/dashboard', ['content' => 'dashboard/index','title' => 'Dashboard']);
     }
 
+//  my articles tanpa pagination
+
+    // public function MyArticles(){
+    //     $this->load->model('Article_Model');
+    //     $owner_id = $this->session->userdata('user_id');
+    //     $user_role = $this->session->userdata('user_role');
+    //     $myArticle = $this->Article_Model->get_by_owner_id($owner_id);
 
 
-    public function MyArticles(){
-        $this->load->model('Article_Model');
-        $owner_id = $this->session->userdata('user_id');
-        $user_role = $this->session->userdata('user_role');
-        $myArticle = $this->Article_Model->get_by_owner_id($owner_id);
+    //     if($user_role==='admin'){
+    //         $all_articles = api_get('api/articles?owner=all');
+    //         $this->load->view('layouts/dashboard', ['content' => 'dashboard/admin/articles/index','title' => 'Articles', 'articles' => $all_articles]);
+    //     }else if($user_role==='lawyer'){
+    //         $this->load->view('layouts/dashboard', ['content' => 'dashboard/my_articles','title' => 'My Articles', 'articles' => $myArticle]);
 
-
-        if($user_role==='admin'){
-            $all_articles = api_get('api/articles?owner=all');
-            $this->load->view('layouts/dashboard', ['content' => 'dashboard/admin/articles/index','title' => 'Articles', 'articles' => $all_articles]);
-        }else if($user_role==='lawyer'){
-            $this->load->view('layouts/dashboard', ['content' => 'dashboard/my_articles','title' => 'My Articles', 'articles' => $myArticle]);
-
-        }
+    //     }
         
-        // untuk edit page articles ada di /view/dashboard/my_articles.php
+    //     // untuk edit page articles ada di /view/dashboard/my_articles.php
 
 
+    // }
+
+    // myArticles pake pagination
+
+    public function MyArticles($offset = 0) {
+    $this->load->model('Article_Model');
+    $this->load->library('pagination');
+
+    $owner_id = $this->session->userdata('user_id');
+    $user_role = $this->session->userdata('user_role');
+
+    $per_page = 6; // jumlah artikel per halaman
+
+    if ($user_role === 'admin') {
+        // API ambil semua artikel
+        $all_articles = api_get('api/articles?owner=all&limit='.$per_page.'&offset='.$offset);
+
+        // total_rows bisa didapat dari API kalau ada, sementara pakai count()
+        $total_rows = isset($all_articles['total']) ? $all_articles['total'] : count($all_articles['data']);
+
+        // Konfigurasi pagination
+        $config['base_url'] = site_url('dashboard/MyArticles');
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['uri_segment'] = 3;
+
+        // Bootstrap 5 style
+        $config['full_tag_open'] = '<ul class="pagination justify-content-center">';
+        $config['full_tag_close'] = '</ul>';
+        $config['attributes'] = ['class' => 'page-link'];
+        $config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close'] = '</span></li>';
+        $config['num_tag_open'] = '<li class="page-item">';
+        $config['num_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li class="page-item">';
+        $config['prev_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li class="page-item">';
+        $config['next_tag_close'] = '</li>';
+
+        $this->pagination->initialize($config);
+
+        $this->load->view('layouts/dashboard', [
+            'content' => 'dashboard/admin/articles/index',
+            'title' => 'Articles',
+            'articles' => $all_articles['data'],
+            'pagination' => $this->pagination->create_links()
+        ]);
+
+    } else if ($user_role === 'lawyer') {
+        // Ambil artikel berdasarkan owner_id dengan limit + offset
+        $myArticle = $this->Article_Model->get_by_owner_id($owner_id, $per_page, $offset);
+        $total_rows = $this->Article_Model->count_by_owner_id($owner_id);
+
+        // Konfigurasi pagination
+        $config['base_url'] = site_url('dashboard/MyArticles');
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['uri_segment'] = 3;
+
+        $config['full_tag_open'] = '<ul class="pagination justify-content-center">';
+        $config['full_tag_close'] = '</ul>';
+        $config['attributes'] = ['class' => 'page-link'];
+        $config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close'] = '</span></li>';
+        $config['num_tag_open'] = '<li class="page-item">';
+        $config['num_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li class="page-item">';
+        $config['prev_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li class="page-item">';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_link'] = '« Prev';
+$config['next_link'] = 'Next »';
+
+        $this->pagination->initialize($config);
+
+        $this->load->view('layouts/dashboard', [
+            'content' => 'dashboard/articles/my_articles',
+            'title' => 'My Articles',
+            'articles' => $myArticle,
+            'pagination' => $this->pagination->create_links()
+        ]);
     }
+}
+
 
     public function chats(){
         $this->load->model('Chats_Model');
@@ -165,7 +248,9 @@ class Dashboard extends CI_Controller {
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
+
         $result = json_decode($response, true);
+
 
         return [$httpcode, $result];
     }
