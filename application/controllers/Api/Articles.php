@@ -99,6 +99,7 @@ public function create()
             'cover_url' => $cover
         ];
 
+
         $result = $this->article->update($id, $data);
 
         return api_response(true, $data, 'berhasil mengupdate data');

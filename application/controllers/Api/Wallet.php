@@ -10,14 +10,25 @@ class Wallet extends CI_Controller {
         $this->user_id = 1; // contoh hardcode dulu
     }
     // GET /api/wallet
-    public function index() {
-        $balance = $this->wallet->get_balance($this->user_id);
+    public function index($user_id) {
+        $balance = $this->wallet->get_balance($user_id);
         api_response(true, $balance);
     }
     // GET /api/wallet/ledger?from=&to=
-    public function ledger() {
+    public function ledger($user_id) {
+        $input = json_decode($this->input->raw_input_stream, true);
+        
+        $from = null;
+        $to = null;
+
+        if(empty($input)){
+            $from = $input['from'];
+            $to = $input['to'];
+        } else {
         $from = $this->input->get('from');
         $to   = $this->input->get('to');
+        }
+
         $rows = $this->wallet->get_ledger($this->user_id, $from, $to);
         api_response(true, $rows);
     }

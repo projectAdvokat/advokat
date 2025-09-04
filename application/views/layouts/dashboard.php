@@ -370,14 +370,24 @@
           <span class="badge bg-danger ms-auto"></span>
         </a>
       </li>
+      <li class="sidebar-nav-item">
+        <a href="<?= base_url('dashboard/wallet/' . $this->session->userdata['user_id']) ?>" 
+           class="sidebar-nav-link <?= ($this->uri->segment(2) == 'wallet') ? 'active' : '' ?>">
+          <i class="fas fa-comments"></i>
+          <span>Wallet</span>
+          <span class="badge bg-danger ms-auto"></span>
+        </a>
+      </li>
       
     </ul>
     
     <div class="sidebar-footer">
       <div class="user-profile">
+      <a href="<?= base_url('dashboard/profile') ?>" class="text-decoration-none">
         <div class="user-avatar">
           <?= strtoupper(substr($this->session->userdata('user_name'), 0, 1)) ?>
         </div>
+      </a>
         <div class="user-info">
           <div class="user-name"><?= $this->session->userdata('user_name') ?></div>
           <div class="user-role"><?= $this->session->userdata('user_role') ?></div>
@@ -386,6 +396,7 @@
           <i class="fas fa-sign-out-alt"></i>
         </a>
       </div>
+      </a>
     </div>
   </div>
 

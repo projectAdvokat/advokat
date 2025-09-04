@@ -301,13 +301,13 @@ public function get_by_slug($slug)
 public function update_article($id)
 {
     $this->load->library('upload');
-    $this->load->model('Article_model');
+    $this->load->model('Article_Model');
 
     // 🔹 Ambil data artikel lama dari DB
-    $article = $this->Article_model->get_by_id($id);
+    $article = $this->Article_Model->get_by_id($id);
 
     // Ambil cover lama
-    $coverOld = $this->input->post('cover_old');
+    $coverOld = $article['cover_url'];
     $coverNew = $coverOld;
 
     // Jika ada file baru
@@ -326,24 +326,27 @@ public function update_article($id)
             if (is_file($oldPath)) {
                 unlink($oldPath);
             }
+
         } else {
             // Kalau gagal upload
             $error = $this->upload->display_errors();
             show_error("Upload gagal: $error");
         }
     }
+    
 
     // Data untuk API
     $payload = [
         'title'       => $this->input->post('title'),
         'excerpt'     => $this->input->post('excerpt'),
         'body'        => $this->input->post('body'),
-        'cover_url'   => $coverNew,
+        'cover_url'   => $coverNew ,
     ];
+
 
     // 🔥 Panggil API pakai CURL
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, base_url("api/articles/update/$id"));
+    curl_setopt($ch, CURLOPT_URL, base_url("Api/Articles/update/$id"));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
@@ -353,7 +356,7 @@ public function update_article($id)
     curl_close($ch);
 
     $result = json_decode($response, true);
-
+    
     if ($result['ok']) {
         redirect('dashboard/articles');
     } else {
@@ -361,9 +364,5 @@ public function update_article($id)
     }
 }
 
-
-public function edit($id){
-    
-}
 
 }

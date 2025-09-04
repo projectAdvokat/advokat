@@ -4,6 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Create Article</title>
+  <!-- wajib untuk responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -21,7 +24,8 @@
 <body>
 <div class="container py-5">
   <div class="row justify-content-center">
-    <div class="col-lg-8">
+    <!-- gunakan col-12 supaya full di hp -->
+    <div class="col-12 col-md-10 col-lg-8">
       <div class="card p-4">
         <div class="card-body">
           <h2 class="mb-4 text-center">✍️ Create New Article</h2>
@@ -74,7 +78,7 @@
               <input type="datetime-local" name="published_at" class="form-control">
             </div>
 
-            <div class="d-flex justify-content-between mt-4">
+            <div class="d-flex justify-content-between mt-4 flex-wrap gap-2">
               <a href="<?= site_url('dashboard/articles') ?>" class="btn btn-outline-secondary">← Back</a>
               <button type="submit" class="btn btn-primary">Save Article</button>
             </div>
@@ -86,6 +90,7 @@
     </div>
   </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   function slugify(text) {

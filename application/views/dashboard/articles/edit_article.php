@@ -71,7 +71,7 @@
           <label for="cover" class="form-label">Cover Image</label>
           <?php if (!empty($article['cover_url'])): ?>
             <div class="mb-3">
-              <img src="<?= base_url('uploads/articles/'.$article['cover_url']); ?>" 
+              <img src="<?= base_url('uploads/articles/' . $article['cover_url']); ?>" 
                    alt="Cover" 
                    class="img-fluid rounded shadow-sm border" 
                    style="max-height: 250px;">
