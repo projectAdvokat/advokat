@@ -120,6 +120,10 @@ $route['dashboard/chats']['GET'] = 'Dashboard/chats';
 $route['dashboard/profile']['GET'] = 'Profile/index';
 $route['dashboard/wallet/(:num)']['GET'] = 'Wallet/index/$1';
 
-// dashboard
+// dashboard    
+$route['booking/xendit_webhook'] = 'api/booking/xendit_webhook';
+$route['booking/check_payment_status/(:any)'] = 'booking/check_payment_status/$1';
 $route['dashboard'] = 'Dashboard/index';
+
+$route['booking/success'] = 'Api/Booking/success';
 

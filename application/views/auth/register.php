@@ -18,7 +18,7 @@
 
       <select id="role" class="select select-bordered w-full" required>
         <option value="" disabled selected>Pilih Role</option>
-        <option value="user">User</option>
+        <option value="client">Client</option>
         <option value="lawyer">Lawyer</option>
       </select>
 
@@ -55,7 +55,7 @@
         if (data.status) {
           msgEl.innerHTML = `<p class="text-green-600">✅ ${data.message}. Silakan login.</p>`;
           // redirect ke halaman login jika mau:
-          window.location.href = "<?= site_url('auth/login') ?>";
+          window.location.href = "<?= site_url('login') ?>";
         } else {
           msgEl.innerHTML = `<p class="text-red-600">❌ ${data.message}</p>`;
         }

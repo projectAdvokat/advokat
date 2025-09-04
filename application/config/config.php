@@ -1,5 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$config['xendit_api_key'] = 'xnd_development_MR0fqgZYkcwRmauN0ERP1DWt3SwDkGjF7Wykxl9zbSScFtD5rwxQ8AObSdkvwk'; // API Key dari dashboard Xendit
+// application/config/config.php
+// $config['xendit_api_key'] = 'your_xendit_secret_key';
+$config['xendit_callback_token'] = 'XYXDoShEhsxsDJTh5WdyvHKapYvYIMm1Te5JkvlBsVkBmBEr';
 // if (function_exists('load_dotenv')) {
 //     load_dotenv();
 // }
@@ -33,11 +37,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // dua dua nya jangan di hapus
 // $config['base_url'] = 'https://advokat.japrime.id/';
+$config['base_url'] = 'https://advokat.japrime.id';
 
-
-// $config['base_url'] = 'https://advokat.japrime.id';
-
-$config['base_url'] = 'http://localhost/advokat';
+// $config['base_url'] = 'http://localhost/advokat';
 
 /*
 |--------------------------------------------------------------------------
