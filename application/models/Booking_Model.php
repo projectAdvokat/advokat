@@ -24,6 +24,8 @@ class Booking_Model extends CI_Model {
         );
     }
 
+
+
     public function get_all() {
         return $this->db->get($this->table)->result_array();
     }

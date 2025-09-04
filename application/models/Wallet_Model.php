@@ -33,6 +33,7 @@ class Wallet_Model extends CI_Model {
     
     public function get_balance($user_id) {
         return $this->db->get_where('wallets', ['user_id' => $user_id])->row_array();
+
     }
 
     public function get_ledger($user_id, $from = null, $to = null) {
@@ -61,5 +62,11 @@ class Wallet_Model extends CI_Model {
                 'balance' => $amount
             ]);
         }
+    }
+
+       public function deduct_balance($user_id, $amount) {
+        $this->db->set('balance', 'balance - ' . (int)$amount, false)
+                 ->where('user_id', $user_id)
+                 ->update($this->table);
     }
 }

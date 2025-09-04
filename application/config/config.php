@@ -37,9 +37,9 @@ $config['xendit_callback_token'] = 'XYXDoShEhsxsDJTh5WdyvHKapYvYIMm1Te5JkvlBsVkB
 
 // dua dua nya jangan di hapus
 // $config['base_url'] = 'https://advokat.japrime.id/';
-$config['base_url'] = 'https://advokat.japrime.id';
+// $config['base_url'] = 'https://advokat.japrime.id';
 
-// $config['base_url'] = 'http://localhost/advokat';
+$config['base_url'] = 'http://localhost/advokat';
 
 /*
 |--------------------------------------------------------------------------

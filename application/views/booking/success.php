@@ -76,8 +76,7 @@
     </div>
 
     <script>
-        const bookingId = '<?= $booking["id"] ?? "" ?>';
-        const invoiceId = '<?= $invoice_id ?>';
+        const bookingId = '<?= $booking->id ?? "" ?>';
         
         function checkPaymentStatus() {
             if (!bookingId) {

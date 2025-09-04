@@ -12,6 +12,8 @@ class Booking extends CI_Controller {
         parent::__construct();
         $this->load->model('Booking_Model', 'booking');
         $this->load->model('Chats_Model', 'chat_model');
+        $this->load->model('Wallet_Model', 'wallet');
+
         $this->load->library('session'); // load session
          $this->load->helper('env');
         if (function_exists('load_dotenv')) {
@@ -174,63 +176,46 @@ class Booking extends CI_Controller {
 // Webhook handler untuk Xendit (PENTING!)
 public function xendit_webhook() {
     $raw_input = file_get_contents("php://input");
-    
     $webhook_data = json_decode($raw_input, true);
-    
+
     // Verifikasi signature
-    $callback_token = $this->config->item('xendit_callback_token');
+    $callback_token   = $this->config->item('xendit_callback_token');
     $xendit_signature = $_SERVER['HTTP_X_CALLBACK_TOKEN'] ?? '';
-    // var_dump($webhook_data);
-    
+
     if ($callback_token && $xendit_signature !== $callback_token) {
         http_response_code(403);
-        echo 'Invalid callback token';
+        echo json_encode(['status' => 'error', 'message' => 'Invalid callback token']);
         return;
     }
-    
-    if ($webhook_data['status'] === 'PAID') {
-        
-        $invoice_id = $webhook_data['id'];
-        $external_id = $webhook_data['external_id'];
-        
-        // Parse external_id: booking-{timestamp}-{lawyer_id}-{client_id}
-        $parts = explode('-', $external_id);
-        
-        if (count($parts) >= 4 && $parts[0] === 'booking') {
-            $lawyer_id = $parts[2];
-            $client_id = $parts[3];
-            $amount = $webhook_data['amount'];
-            
-            // 1. BUAT BOOKING (HANYA SETELAH PEMBAYARAN BERHASIL)
-              if ($webhook_data['status'] === 'PAID') {
 
-        $this->booking->updateByPgRef($invoice_id, 'paid');
-      $booking =  $this->booking->getByInvoiceId($invoice_id);
-
-         $chat_data = [
-             'client_id' => $booking->client_id,   // atau ganti kalau nama kolomnya client_id
-        'lawyer_id' => $booking->lawyer_id,
-        'booking_id' => $booking->id,
-            ];
-          
-        
+    if (!isset($webhook_data['status']) || $webhook_data['status'] !== 'PAID') {
+        http_response_code(200);
+        echo json_encode(['status' => 'ignored']);
+        return;
     }
 
-            // 2. BUAT CHAT SESSION
-            $chat_data = [
-                'client_id' => $client_id,
-                'lawyer_id' => $lawyer_id,
-                'booking_id' => $booking_id,
-                'status' => 'active',
-                'created_at' => date('Y-m-d H:i:s')
-            ];
-            
-            // $chat_id = $this->chat_model->insert($chat_data);
-            
-            http_response_code(200);
-            echo 'Webhook processed successfully';
-        }
+    $invoice_id = $webhook_data['id'];
+    $amount     = $webhook_data['amount'];
+
+    // Update booking ke paid
+    $this->booking->updateByPgRef($invoice_id, 'paid');
+    $booking = $this->booking->getByInvoiceId($invoice_id);
+
+    if ($booking) {
+        // Buat chat
+        $chat_data = [
+            'client_id'  => $booking['client_id'],
+            'lawyer_id'  => $booking['lawyer_id'],
+            'booking_id' => $booking['id'],
+        ];
+        $this->chat_model->insert($chat_data);
+
+        // Update wallet lawyer
+        $this->wallet->update_balance($booking['lawyer_id'], $amount);
     }
+
+    http_response_code(200);
+    echo json_encode(['status' => 'success', 'message' => 'Webhook processed']);
 }
 
 // Halaman success - Hanya untuk redirect dan checking
@@ -246,13 +231,7 @@ public function success() {
     // Tampilkan halaman waiting yang akan check status pembayaran
         if ($booking && $booking->status == 'paid') {
             
-              $chat_data = [
-             'client_id' => $user_id,   // atau ganti kalau nama kolomnya client_id
-        'lawyer_id' => $booking->lawyer_id,
-        'booking_id' => $booking->id,
-            ];
-          
-                $this->chat_model->insert($chat_data);
+             
             $this->load->view('booking/success', ['booking' => $booking]);
         } else {
             // kalau webhook belum update
