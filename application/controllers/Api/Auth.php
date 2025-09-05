@@ -7,6 +7,7 @@ class Auth extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('User_Model', 'user');
+        $this->load->model('Lawyer_Model', 'lawyer');
         $this->load->library('session');
         $this->output->set_content_type('application/json');
     }
@@ -29,13 +30,19 @@ class Auth extends CI_Controller {
     {
         $data = json_decode($this->input->raw_input_stream, true);
 
+        // echo json_encode(['status' => false, 'message' => $data]); return;
+
         if (!$data || !isset($data['email'], $data['password'], $data['name'], $data['phone'], $data['role'])) {
             echo json_encode(['status' => false, 'message' => 'Invalid payload']);
             return;
         }
 
+        $name = strtolower(trim($data['name']));
         $email = strtolower(trim($data['email']));
+        $phone = strtolower(trim($data['phone']));
         $role = strtolower(trim($data['role']));
+        $pass = strtolower(trim($data['password']));
+
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->output
@@ -84,30 +91,39 @@ class Auth extends CI_Controller {
         } while ($this->user->get_by_ref_code($ref_code_new));
 
         // Simpan user
-        $insert = [
-            'name'         => $data['name'],
+        $insert_user = [
+            'name'         => $name,
             'email'        => $email,
-            'phone'        => $data['phone'],
+            'phone'        => $phone,
             'role'         => $role,
-            'password_hash'=> password_hash($data['password'], PASSWORD_BCRYPT),
+            'password_hash'=> password_hash($pass, PASSWORD_BCRYPT),
             'ref_code'     => $ref_code_new,
             'referrer_id'  => $referrer_id,
             'status'       => 1
         ];
 
-        $user_id = $this->user->insert($insert);
+        $user_id = $this->user->insert($insert_user);
 
-        echo json_encode([
-            'status' => true,
-            'message' => 'Register berhasil',
-            'data' => [
-                'id' => $user_id,
-                'email' => $email,
-                'role' => $role,
-                'ref_code' => $ref_code_new,
-                'referrer_id' => $referrer_id
-            ]
-        ]);
+        api_response(true, ['post_data' => $insert_user, 'user_id' => $user_id], 'berhasil');
+    }
+
+    function req_lawyer_detail()
+    {
+        $data = json_decode($this->input->raw_input_stream, true);
+
+        $post_data = [
+        'user_id' => $data['user_id'],
+        'years_experience' => $data['years'],
+        'specialties' => $data['specialties'],
+        'price_30m' => $data['price_30m'],
+        'bio' => $data['bio'],
+        'is_online' => 1, // pastikan ini di set saat lawyer online
+        'verified_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $result = $this->lawyer->insert($post_data);
+
+        api_response(true, $post_data, 'berhasil');
     }
 
     /**

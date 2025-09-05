@@ -23,7 +23,14 @@ class Dashboard extends CI_Controller {
 
 
     public function index() {
-        $this->load->view('layouts/dashboard', ['content' => 'dashboard/index','title' => 'Dashboard']);
+        $user_id = $this->session->userdata('user_id');
+        $user_role = $this->session->userdata('user_role');
+
+        if($user_id){
+            $this->load->view('layouts/dashboard', ['content' => 'dashboard/index','title' => 'Dashboard']);
+        } else {
+            redirect(base_url('login'));
+        }
     }
 
 //  my articles tanpa pagination
@@ -278,7 +285,7 @@ $config['next_link'] = 'Next »';
 
             if ($this->upload->do_upload('coverUrl')) {
                 $uploadData = $this->upload->data();
-                $coverUrl   = base_url('uploads/articles/' . $uploadData['file_name']);
+                $coverUrl   = $uploadData['file_name'];
             } else {
                 $error = $this->session->set_flashdata('error', $this->upload->display_errors());
                 redirect('dashboard/articles/create');
@@ -297,6 +304,7 @@ $config['next_link'] = 'Next »';
             'status'      => $status,
             'published_at'=> $published
         ];
+
 
         $req = $this->request('/Api/Articles/create', $postData);
 

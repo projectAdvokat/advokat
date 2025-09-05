@@ -11,18 +11,26 @@
   <div class="card w-full max-w-md shadow-xl bg-base-100 p-6">
     <h2 class="text-2xl font-bold text-center mb-4">Register</h2>
 
-    <form id="registerForm" class="space-y-3">
-      <input type="text" id="name" placeholder="Nama Lengkap" class="input input-bordered w-full" required />
-      <input type="email" id="email" placeholder="Email" class="input input-bordered w-full" required />
-      <input type="text" id="phone" placeholder="Nomor Telepon" class="input input-bordered w-full" required />
+    <form id="registerForm" class="space-y-3" method="post" action="api/register">
+      <input type="text" name="name" id="name" placeholder="Nama Lengkap" class="input input-bordered w-full" required />
+      <input type="email" name="email" id="email" placeholder="Email" class="input input-bordered w-full" required />
+      <input type="text" name="phone" id="phone" placeholder="Nomor Telepon" class="input input-bordered w-full" required />
 
-      <select id="role" class="select select-bordered w-full" required>
+      <select id="role" name="role" class="select select-bordered w-full" required>
         <option value="" disabled selected>Pilih Role</option>
         <option value="client">Client</option>
         <option value="lawyer">Lawyer</option>
       </select>
 
-      <input type="password" id="password" placeholder="Password" class="input input-bordered w-full" required />
+      <!-- Extra fields khusus lawyer -->
+      <div id="lawyerFields" class="hidden space-y-3">
+        <input type="number" name="years_experience" id="years_experience" placeholder="Years of Experience" class="input input-bordered w-full" />
+        <input type="text" name="specialties" id="specialties" placeholder="Specialties (e.g. Family, Business)" class="input input-bordered w-full" />
+        <input type="number" name="price_30m" id="price_30m" placeholder="Price per 30 Minutes (Rp)" class="input input-bordered w-full" />
+        <textarea id="bio" name="bio" placeholder="Short Bio" class="textarea textarea-bordered w-full"></textarea>
+      </div>
+
+      <input type="password" name="password" id="password" placeholder="Password" class="input input-bordered w-full" required />
 
       <button type="submit" class="btn btn-primary w-full">Daftar</button>
     </form>
@@ -30,40 +38,41 @@
     <div id="message" class="mt-4 text-center"></div>
   </div>
 
-  <script>
-    document.getElementById("registerForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const roleSelect = document.getElementById("role");
+    const lawyerFields = document.getElementById("lawyerFields");
+    const msgEl = document.getElementById("message");
 
-      const payload = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        role: document.getElementById("role").value,
-        password: document.getElementById("password").value,
-      };
-
-      try {
-        const res = await fetch("<?= site_url('api/auth/register') ?>", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-        const msgEl = document.getElementById("message");
-
-        if (data.status) {
-          msgEl.innerHTML = `<p class="text-green-600">✅ ${data.message}. Silakan login.</p>`;
-          // redirect ke halaman login jika mau:
-          window.location.href = "<?= site_url('login') ?>";
+    // Toggle field lawyer saat role berubah
+    if (roleSelect) {
+      roleSelect.addEventListener("change", function () {
+        if (this.value === "lawyer") {
+          lawyerFields?.classList.remove("hidden");
         } else {
-          msgEl.innerHTML = `<p class="text-red-600">❌ ${data.message}</p>`;
+          lawyerFields?.classList.add("hidden");
         }
-      } catch (err) {
-        document.getElementById("message").innerHTML = `<p class="text-red-600">⚠️ Terjadi error koneksi</p>`;
+      });
+    }
+
+    // PHP → JS (gunakan json_encode biar aman dari error)
+    const status = <?= json_encode($status ?? null) ?>;
+    const message = <?= json_encode($message ?? "") ?>;
+
+    if (status !== null) {
+      if (status) {
+        msgEl.innerHTML = `<p class="text-green-600">✅ ${message}. Silakan login.</p>`;
+        // kasih delay 2 detik biar pesan terlihat
+        setTimeout(() => {
+          window.location.href = "<?= site_url('login') ?>";
+        }, 2000);
+      } else {
+        msgEl.innerHTML = `<p class="text-red-600">❌ ${message}</p>`;
       }
-    });
-  </script>
+    }
+  });
+</script>
+
 
 </body>
 </html>

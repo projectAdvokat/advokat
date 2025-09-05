@@ -86,7 +86,7 @@
           <a href="<?= site_url('profile/edit'); ?>" class="btn btn-primary">
             <i class="fas fa-edit"></i> Edit Profil
           </a>
-          <a href="<?= site_url('auth/logout'); ?>" class="btn btn-outline-danger">
+          <a href="<?= site_url('logout'); ?>" class="btn btn-outline-danger">
             <i class="fas fa-sign-out-alt"></i> Keluar
           </a>
         </div>
