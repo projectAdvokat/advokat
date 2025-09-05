@@ -78,6 +78,7 @@ class Booking extends CI_Controller {
     }
 
     public function delete($id) {
+        
         $deleted = $this->booking->delete($id);
         if ($deleted) {
             api_response(true, null, 'Booking deleted successfully');
@@ -87,6 +88,19 @@ class Booking extends CI_Controller {
 
 
     
+    }
+
+
+    public function updateStatus() {
+
+        $id = $this->input->post('id');
+        $status = $this->input->post('status');
+        $updated = $this->booking->updateStatus($id, $status);
+        if ($updated) {
+            api_response(true, null, 'Booking status updated successfully');
+        } else {
+            api_response(false, null, 'Failed to update booking status');
+        }
     }
 
     public function get_by_client($id) {
