@@ -1,1 +1,23 @@
+name: Deploy CI3 to cPanel
 
+on:
+  push:
+    branches:
+      - BarrilDev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # (Opsional) Bisa tambahkan step untuk cek syntax PHP
+      
+      - name: Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.2
+        with:
+          server: advokat.japrime.id
+          username: ${{ secrets.CPANEL_USER }}
+          password: ${{ secrets.CPANEL_PASS }}
+          local-dir: ./
+          server-dir: /public_html/advokat.japrime.id
