@@ -17,7 +17,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.3.2
         with:
           server: advokat.japrime.id
-          username: ${{ secrets.CPANEL_USER }}
-          password: ${{ secrets.CPANEL_PASS }}
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
           local-dir: ./
           server-dir: /public_html/advokat.japrime.id
