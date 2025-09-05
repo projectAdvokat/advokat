@@ -367,7 +367,7 @@ bookingForm.addEventListener("submit", async function(e) {
       throw new Error(result.message || 'Gagal membuat transaksi');
     }
   } catch (error) {
-    console.error("Error:", error);
+  console.error("Error:", error);
     alert("Terjadi kesalahan saat memproses booking: " + error.message);
     resetButtonState();
   }

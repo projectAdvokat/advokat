@@ -27,8 +27,30 @@ class Booking_Model extends CI_Model {
 
 
     public function get_all() {
-        return $this->db->get($this->table)->result_array();
-    }
+    $this->db->select('
+        bookings.*, 
+        u_client.name AS client_name, 
+        u_client.email AS client_email, 
+        u_client.role  AS client_role, 
+        u_lawyer.name AS lawyer_name, 
+        u_lawyer.email AS lawyer_email, 
+        u_lawyer.role  AS lawyer_role,
+        lawyers.price_30m
+    ');
+    $this->db->from('bookings');
+
+    // join ke users untuk client
+    $this->db->join('users AS u_client', 'u_client.id = bookings.client_id', 'left');
+
+    // join ke lawyers
+    $this->db->join('lawyers', 'lawyers.user_id = bookings.lawyer_id', 'left');
+
+    // join ke users untuk lawyer
+    $this->db->join('users AS u_lawyer', 'u_lawyer.id = lawyers.user_id', 'left');
+
+    return $this->db->get()->result_array();
+}
+
 
       public function getLastByUser($user_id)
     {
@@ -57,6 +79,12 @@ class Booking_Model extends CI_Model {
     public function delete($id) {
         return $this->db->where('id', $id)->delete($this->table);
     }
+
+    public function updateStatus($id, $status) {
+        return $this->db->where('id', $id)->update($this->table, ['status' => $status]);
+    }
+
+
 public function get_by_client($client_id) {
     $this->db->select('
         lawyers.user_id as lawyer_id, 

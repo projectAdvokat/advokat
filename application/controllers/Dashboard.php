@@ -450,4 +450,35 @@ public function update_article($id)
 }
 
 
+
+public function booking(){
+  $role =  $this->session->userdata('user_role');
+
+
+
+  if($role ==='admin'){
+    $this->load->model('Booking_Model','booking');
+    $allBooking = $this->booking->get_all();
+    $this->load->view('layouts/dashboard', ['content' => 'dashboard/admin/booking/index','title' => 'Booking', 'bookings' => $allBooking]);
+  }
+  else{
+    // $this->session->set_flashdata('error', 'Hanya admin yang bisa mengakses booking.');
+    redirect(base_url('dashboard'));
+    return;
+  }
+
+
+    
+
+    
+
+}
+
+
+
+
+
+
+
+
 }

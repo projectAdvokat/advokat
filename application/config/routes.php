@@ -125,5 +125,7 @@ $route['booking/xendit_webhook'] = 'api/booking/xendit_webhook';
 $route['booking/check_payment_status/(:any)'] = 'booking/check_payment_status/$1';
 $route['dashboard'] = 'Dashboard/index';
 
+
+$route['dashboard/booking'] = 'Dashboard/booking';
 $route['booking/success'] = 'Api/Booking/success';
 

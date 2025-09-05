@@ -14,6 +14,7 @@
 
     <!-- Stats Cards -->
     <div class="row mb-4">
+
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary h-100 py-2">
                 <div class="card-body">
@@ -21,7 +22,7 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Total Artikel</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= count($articles['data']) ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= count($articles) ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-newspaper fa-2x text-gray-300"></i>
@@ -39,7 +40,7 @@
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Artikel Aktif</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= count(array_filter($articles['data'], function($article) { 
+                                <?= count(array_filter($articles, function($article) { 
                                     return $article['status'] === 'active'; 
                                 })) ?>
                             </div>
@@ -60,7 +61,7 @@
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                 Artikel Diblokir</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= count(array_filter($articles['data'], function($article) { 
+                                <?= count(array_filter($articles, function($article) { 
                                     return $article['status'] === 'banned'; 
                                 })) ?>
                             </div>
@@ -81,7 +82,7 @@
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                 Admin Articles</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= count(array_filter($articles['data'], function($article) { 
+                                <?= count(array_filter($articles, function($article) { 
                                     return $article['author_role'] === 'admin'; 
                                 })) ?>
                             </div>
@@ -109,7 +110,7 @@
                 <select id="authorFilter" class="form-select form-select-sm">
                     <option value="">Semua Penulis</option>
                     <?php 
-                    $authors = array_unique(array_column($articles['data'], 'author_name'));
+                    $authors = array_unique(array_column($articles, 'author_name'));
                     foreach ($authors as $author): 
                     ?>
                         <option value="<?= htmlspecialchars($author) ?>"><?= htmlspecialchars($author) ?></option>
@@ -132,7 +133,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($articles['data'] as $index => $article): ?>
+                        <?php foreach ($articles as $index => $article): ?>
                         <tr>
                             <td><?= $index + 1 ?></td>
                             <td>
@@ -213,6 +214,8 @@
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
+
+                    <?= $pagination?>
                 </table>
             </div>
         </div>
