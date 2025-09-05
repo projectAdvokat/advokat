@@ -20,4 +20,4 @@ jobs:
           username: ${{ secrets.ftp_username }}
           password: ${{ secrets.ftp_password }}
           local-dir: ./
-          server-dir: /public_html/advokat.japrime.id
+          server-dir: /public_html/advokat.japrime.id/
