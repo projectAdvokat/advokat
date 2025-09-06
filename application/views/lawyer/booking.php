@@ -315,7 +315,7 @@
     
     // Calculate price based on duration
     function calculatePrice(duration) {
-      const pricePer30Minutes = 150000;
+      const pricePer30Minutes = <?= isset($lawyer['price_30m']) ? intval($lawyer['price_30m']) : 0; ?>;
       const intervals = Math.ceil(duration / 30);
       return intervals * pricePer30Minutes;
     }
