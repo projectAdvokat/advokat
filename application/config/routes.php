@@ -133,3 +133,4 @@ $route['dashboard'] = 'Dashboard/index';
 $route['dashboard/booking'] = 'Dashboard/booking';
 $route['booking/success'] = 'Api/Booking/success';
 
+$route ['api/booking/pay/(:num)']['POST'] = 'Api/Booking/pay/$1';
