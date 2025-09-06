@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Referral_Cofig_Model extends CI_Model {
+class Referral_Config_Model extends CI_Model {
 
     protected $table = 'referral_config';
 

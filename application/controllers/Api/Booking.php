@@ -276,12 +276,15 @@ class Booking extends CI_Controller {
 public function xendit_webhook() {
     $this->load->model('Referral_Config_Model', 'referral_config');
     $this->load->model('User_Model', 'user');
-    $this->load->model('Commisions_Model', 'commisions');
+    // $this->load->model('Commisions_Model', 'commisions');
+    $this->load->model('Wallet_Model', 'wallet');
+    $this->load->model('Booking_Model', 'booking');
+    $this->load->model('Chat_Model', 'chat_model');
 
     $raw_input = file_get_contents("php://input");
     $webhook_data = json_decode($raw_input, true);
 
-    // Verifikasi signature
+    // ✅ Verifikasi callback token
     $callback_token   = $_ENV['XENDIT_CALLBACK_TOKEN'] ?? '';
     $xendit_signature = $_SERVER['HTTP_X_CALLBACK_TOKEN'] ?? '';
 
@@ -291,49 +294,65 @@ public function xendit_webhook() {
         return;
     }
 
-    if (!isset($webhook_data['status']) || $webhook_data['status'] !== 'PAID') {
-        http_response_code(200);
-        echo json_encode(['status' => 'ignored']);
+    if (empty($webhook_data['id'])) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'No invoice ID']);
         return;
     }
 
     $invoice_id = $webhook_data['id'];
-    $amount     = $webhook_data['amount'];
 
-    // Update booking ke paid
+    // ✅ Ambil detail invoice langsung dari Xendit API
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://api.xendit.co/v2/invoices/" . $invoice_id);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_USERPWD, $_ENV['XENDIT_API_KEY'] . ":");
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    $invoice = json_decode($result, true);
+
+    if (!$invoice || !isset($invoice['status']) || $invoice['status'] !== 'PAID') {
+        http_response_code(200);
+        echo json_encode(['status' => 'ignored', 'message' => 'Invoice not paid']);
+        return;
+    }
+
+    $amount = $invoice['amount'];
+
+    // ✅ Update booking ke paid
     $this->booking->updateByPgRef($invoice_id, 'paid');
     $booking = $this->booking->getByInvoiceId($invoice_id);
 
     if ($booking) {
-        // Buat chat
-        $chat_data = [
+        // Buat chat otomatis
+        $this->chat_model->insert([
             'client_id'  => $booking['client_id'],
             'lawyer_id'  => $booking['lawyer_id'],
             'booking_id' => $booking['id'],
-        ];
-        $this->chat_model->insert($chat_data);
-        // Komisi
-           $config = $this->referral_config->get_all(); 
-            $gross  = $amount;
-              $platform_fee = $gross * $config['platform_fee_pct'] / 100;
+        ]);
+
+        // Hitung komisi
+        $config = $this->referral_config->get_all(); 
+        $gross  = $amount;
+        $platform_fee = $gross * $config['platform_fee_pct'] / 100;
         $company_amt  = $platform_fee * $config['company_pct_of_fee'] / 100;
         $ref_pool     = $platform_fee - $company_amt;
-         $l1_amt = $ref_pool * $config['l1_pct_of_pool'] / 100;
+
+        $l1_amt = $ref_pool * $config['l1_pct_of_pool'] / 100;
         $l2_amt = $ref_pool * $config['l2_pct_of_pool'] / 100;
         $l3_amt = $ref_pool * $config['l3_pct_of_pool'] / 100;
         $lawyer_amt = $gross - $platform_fee;
+
         $client   = $this->user->get_by_id($booking['client_id']);
         $l1_user  = $client['referrer_id'] ?? null;
         $l2_user  = $l1_user ? $this->user->get_referrer_id($l1_user) : null;
         $l3_user  = $l2_user ? $this->user->get_referrer_id($l2_user) : null;
 
+        // ✅ Update saldo wallet
+        $this->wallet->update_balance($booking['lawyer_id'], $lawyer_amt);
+        $this->wallet->update_balance(1, $company_amt); // perusahaan
 
-        // Update wallet lawyer
-   $this->wallet->update_balance($booking['lawyer_id'], $lawyer_amt);
-        // Company (kalau kamu pakai user_id khusus misal 1)
-        $this->wallet->update_balance(1, $company_amt);
-
-        // Referral L1-L3
         if ($l1_user) $this->wallet->update_balance($l1_user, $l1_amt);
         else $this->wallet->update_balance(1, $l1_amt);
 
@@ -343,7 +362,8 @@ public function xendit_webhook() {
         if ($l3_user) $this->wallet->update_balance($l3_user, $l3_amt);
         else $this->wallet->update_balance(1, $l3_amt);
 
-           $this->commissions->insert([
+        // ✅ Simpan laporan komisi
+        $this->commisions->insert([
             'booking_id'     => $booking['id'],
             'gross_price'    => $gross,
             'platform_fee'   => $platform_fee,
@@ -356,13 +376,10 @@ public function xendit_webhook() {
             'l3_amount'      => $l3_amt,
             'created_at'     => date('Y-m-d H:i:s')
         ]);
-
-        // Update wallet lawyer
-        // $this->wallet->update_balance($booking['lawyer_id'], $amount);
     }
 
     http_response_code(200);
-    echo json_encode(['status' => 'success', 'message' => 'Webhook processed']);
+    echo json_encode(['status' => 'success', 'message' => 'Webhook processed via Xendit API']);
 }
 
 // Halaman success - Hanya untuk redirect dan checking
