@@ -23,7 +23,7 @@ class LawyerPage extends CI_Controller {
 
     {
         $this->load->model('Lawyer_Model', 'lawyers');
-        $lawyer = $lawyers->get_by_id($lawyer_id);
+        $lawyer = $this->lawyers->get_by_id($lawyer_id);
         // $lawyer = api_get('/api/lawyer/show/'.$lawyer_id);
 
         
