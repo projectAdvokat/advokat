@@ -205,7 +205,7 @@ class Booking extends CI_Controller {
 
     $lawyer   = $this->lawyer->get_by_id($lawyer_id);
     $quantity = ceil($data['duration'] / 30);
-    $price    = $lawyer['price_30m'];
+    $price    = intval($lawyer['price_30m']);
     $total    = $price * $quantity;
 
     // API Key Xendit
