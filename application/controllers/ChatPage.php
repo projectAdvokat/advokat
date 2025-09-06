@@ -10,7 +10,7 @@ class ChatPage extends CI_Controller {
     
 
     public function index($booking_id) {
-        $chats = api_get('/api/chat?booking_id='.$booking_id)['data'];
+        $chats = api_get('api/chats?booking_id='.$booking_id)['data'];
         $count = 0;
         // $chat_id = $chats->chat->id;
 
