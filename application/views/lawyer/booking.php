@@ -288,7 +288,7 @@
               <!-- Price Display -->
               <div class="price-display">
                 <div class="price-label">Perkiraan Biaya Konsultasi</div>
-                <div class="price-amount" id="priceDisplay">Rp 150.000</div>
+                <div class="price-amount" id="priceDisplay"><?=$lawyer['price_30m']?></div>
                 <small class="text-muted">*Biaya akhir dapat berubah sesuai durasi</small>
               </div>
 
