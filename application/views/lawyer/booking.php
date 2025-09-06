@@ -370,7 +370,7 @@ bookingForm.addEventListener("submit", async function(e) {
   } catch (error) {
     
   console.error("Error:", error);
-    alert("Terjadi kesalahan saat memproses booking: " + error);
+    alert("Terjadi kesalahan saat memproses booking: " + lawyerId);
     resetButtonState();
   }
 });
