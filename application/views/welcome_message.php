@@ -236,13 +236,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<div class="hidden lg:flex">
 			<ul class="menu menu-horizontal px-1">
 				<?php if (!$this->session->userdata('user_id')): ?>
-					<li><a href="<?= site_url('login') ?>" class="font-medium">Login</a></li>
-					<li><a href="<?= site_url('register') ?>" class="font-medium">Register</a></li>
+					<li><a href="<?= base_url('login') ?>" class="font-medium">Login</a></li>
+					<li><a href="<?= base_url('register') ?>" class="font-medium">Register</a></li>
 				<?php else: ?>
 					<?php if (in_array($this->session->userdata('user_role'), ['admin','lawyer'])): ?>
-						<li><a href="<?= site_url('dashboard') ?>" class="font-medium">Dashboard</a></li>
+						<li><a href="<?= base_url('dashboard') ?>" class="font-medium">Dashboard</a></li>
 					<?php else: ?>
-						<li><a href="<?= site_url('lawyers/list') ?>" class="font-medium">Cari Lawyer</a></li>
+						<li><a href="<?= base_url('lawyers/list') ?>" class="font-medium">Cari Lawyer</a></li>
 					<?php endif; ?>
 					
 					<!-- User dropdown for desktop -->

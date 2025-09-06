@@ -235,7 +235,7 @@
               </span>
             </div>
             
-            <a href="<?= site_url('lawyers/booking/'.$lawyer['user_id']); ?>" class="btn-booking">
+            <a href="<?= base_url('lawyers/booking/'.$lawyer['user_id']); ?>" class="btn-booking">
               <i class="fas fa-calendar-check mr-2"></i> Booking Konsultasi
             </a>
           </div>
