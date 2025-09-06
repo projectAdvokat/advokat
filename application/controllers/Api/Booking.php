@@ -113,12 +113,86 @@ class Booking extends CI_Controller {
         api_response(true, $bookings);
     }
 
-    // pay with midtrans
-    public function pay($lawyer_id) {
+    // pay with xendit (with library)
+//     public function pay($lawyer_id) {
+//     $this->load->model('Lawyer_Model', 'lawyer');
+//     header('Content-Type: application/json');
+
+//     // baca body JSON dari fetch()
+//     $data = json_decode($this->input->raw_input_stream, true);
+
+//     if (!$lawyer_id || empty($data['duration'])) {
+//         echo json_encode([
+//             'status' => 'error',
+//             'message' => 'Lawyer ID dan durasi harus diisi'
+//         ]);
+//         return;
+//     }
+
+//     $lawyer =  $this->lawyer->get_by_id($lawyer_id);
+//     $quantity = ceil($data['duration'] / 30); 
+//     $price = intval($lawyer['price_30m']);
+//     $total = $price * $quantity;
+
+//     // Set Xendit API Key
+//     Configuration::setXenditKey($_ENV['XENDIT_API_KEY']);
+
+//     try {
+//         $params = [
+//             'external_id' => 'booking-' . time() . '-' . $lawyer_id . '-' . $this->session->userdata('user_id'),
+//             'payer_email' => $this->session->userdata('user_email') ?? 'customer@example.com',
+//             'description' => 'Konsultasi Hukum dengan ' . $lawyer['name'] . ' (' . $data['duration'] . ' menit)',
+//             'amount' => $total,
+//             'success_redirect_url' => base_url('booking/success'),
+//             'failure_redirect_url' => base_url('booking/failure'),
+//             'currency' => 'IDR',
+//             'items' => [
+//                 [
+//                     'name' => 'Konsultasi Hukum ' . $data['duration'] . ' menit',
+//                     'quantity' => $quantity,
+//                     'price' => $price,
+//                     'category' => 'Legal Services'
+//                 ]
+//             ]
+//         ];
+
+//         $apiInstance = new InvoiceApi();
+//         $create_invoice_request = new Xendit\Invoice\CreateInvoiceRequest($params);
+//         $invoice = $apiInstance->createInvoice($create_invoice_request);
+
+//         $this->booking->insert([
+//     'client_id' => $this->session->userdata('user_id'),
+//     'lawyer_id' => $lawyer_id,
+//     'duration_minutes' => $data['duration'],
+//     'price_snapshot' => $total,
+//     'pg_ref' => $invoice['id'], // simpan di pg_ref
+//     'status' => 'pending',
+//     'created_at' => date('Y-m-d H:i:s')
+// ]); 
+        
+
+//         echo json_encode([
+//             'status' => 'success',
+//             'message' => 'Invoice berhasil dibuat',
+//             'data' => [
+//                 'invoice_url' => $invoice['invoice_url']
+//             ]
+//         ]);
+        
+//     } catch (Exception $e) {
+//         error_log('Xendit Error: ' . $e->getMessage());
+//         echo json_encode([
+//             'status' => 'error',
+//             'message' => 'Terjadi kesalahan saat membuat invoice: ' . $e->getMessage()
+//         ]);
+//     }
+// }
+    // pay with xendit (without lib)
+    public function pay($lawyer_id)
+{
     $this->load->model('Lawyer_Model', 'lawyer');
     header('Content-Type: application/json');
 
-    // baca body JSON dari fetch()
     $data = json_decode($this->input->raw_input_stream, true);
 
     if (!$lawyer_id || empty($data['duration'])) {
@@ -129,64 +203,74 @@ class Booking extends CI_Controller {
         return;
     }
 
-    $lawyer =  $this->lawyer->get_by_id($lawyer_id);
-    $quantity = ceil($data['duration'] / 30); 
-    $price = intval($lawyer['price_30m']);
-    $total = $price * $quantity;
+    $lawyer   = $this->lawyer->get_by_id($lawyer_id);
+    $quantity = ceil($data['duration'] / 30);
+    $price    = intval($lawyer['price_30m']);
+    $total    = $price * $quantity;
 
-    // Set Xendit API Key
-    Configuration::setXenditKey($_ENV['XENDIT_API_KEY']);
+    // API Key Xendit
+    $apiKey = $_ENV['XENDIT_API_KEY'] ?? 'xnd_development_xxx'; // ganti sesuai punya kamu
 
-    try {
-        $params = [
-            'external_id' => 'booking-' . time() . '-' . $lawyer_id . '-' . $this->session->userdata('user_id'),
-            'payer_email' => $this->session->userdata('user_email') ?? 'customer@example.com',
-            'description' => 'Konsultasi Hukum dengan ' . $lawyer['name'] . ' (' . $data['duration'] . ' menit)',
-            'amount' => $total,
-            'success_redirect_url' => base_url('booking/success'),
-            'failure_redirect_url' => base_url('booking/failure'),
-            'currency' => 'IDR',
-            'items' => [
-                [
-                    'name' => 'Konsultasi Hukum ' . $data['duration'] . ' menit',
-                    'quantity' => $quantity,
-                    'price' => $price,
-                    'category' => 'Legal Services'
-                ]
-            ]
-        ];
+    // Invoice params
+    $params = [
+        'external_id' => 'booking-' . time() . '-' . $lawyer_id . '-' . $this->session->userdata('user_id'),
+        'payer_email' => $this->session->userdata('user_email') ?? 'customer@example.com',
+        'description' => 'Konsultasi Hukum dengan ' . $lawyer['name'] . ' (' . $data['duration'] . ' menit)',
+        'amount'      => $total,
+        'success_redirect_url' => base_url('booking/success'),
+        'failure_redirect_url' => base_url('booking/failure'),
+        'currency'    => 'IDR',
+        'items' => [[
+            'name'     => 'Konsultasi Hukum ' . $data['duration'] . ' menit',
+            'quantity' => $quantity,
+            'price'    => $price,
+            'category' => 'Legal Services'
+        ]]
+    ];
 
-        $apiInstance = new InvoiceApi();
-        $create_invoice_request = new Xendit\Invoice\CreateInvoiceRequest($params);
-        $invoice = $apiInstance->createInvoice($create_invoice_request);
+    // Request ke Xendit API
+    $ch = curl_init('https://api.xendit.co/v2/invoices');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json'
+    ]);
+    curl_setopt($ch, CURLOPT_USERPWD, $apiKey . ":");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
 
+    $response = curl_exec($ch);
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    $invoice = json_decode($response, true);
+
+    if ($httpcode == 200 || $httpcode == 201) {
+        // simpan ke DB booking
         $this->booking->insert([
-    'client_id' => $this->session->userdata('user_id'),
-    'lawyer_id' => $lawyer_id,
-    'duration_minutes' => $data['duration'],
-    'price_snapshot' => $total,
-    'pg_ref' => $invoice['id'], // simpan di pg_ref
-    'status' => 'pending',
-    'created_at' => date('Y-m-d H:i:s')
-]); 
-        
+            'client_id'       => $this->session->userdata('user_id'),
+            'lawyer_id'       => $lawyer_id,
+            'duration_minutes'=> $data['duration'],
+            'price_snapshot'  => $total,
+            'pg_ref'          => $invoice['id'],
+            'status'          => 'pending',
+            'created_at'      => date('Y-m-d H:i:s')
+        ]);
 
         echo json_encode([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => 'Invoice berhasil dibuat',
-            'data' => [
+            'data'    => [
                 'invoice_url' => $invoice['invoice_url']
             ]
         ]);
-        
-    } catch (Exception $e) {
-        error_log('Xendit Error: ' . $e->getMessage());
+    } else {
         echo json_encode([
-            'status' => 'error',
-            'message' => 'Terjadi kesalahan saat membuat invoice: ' . $e->getMessage()
+            'status'  => 'error',
+            'message' => 'Gagal membuat invoice',
+            'response'=> $invoice
         ]);
     }
 }
+
 
 // Webhook handler untuk Xendit (PENTING!)
 public function xendit_webhook() {

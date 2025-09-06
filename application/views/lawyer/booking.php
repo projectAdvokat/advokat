@@ -360,7 +360,6 @@ bookingForm.addEventListener("submit", async function(e) {
 
     const result = await response.json();
     
-    
     if (result.status === 'success' && result.data) {
       // Redirect to Xendit payment page
       window.location.href = result.data.invoice_url;
@@ -368,9 +367,8 @@ bookingForm.addEventListener("submit", async function(e) {
       throw new Error(result.message || 'Gagal membuat transaksi');
     }
   } catch (error) {
-    
   console.error("Error:", error);
-    alert("Terjadi kesalahan saat memproses booking: " + lawyerId);
+    alert("Terjadi kesalahan saat memproses booking: " + error.message);
     resetButtonState();
   }
 });
