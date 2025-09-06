@@ -42,7 +42,7 @@ class Payout extends CI_Controller {
         $this->wallet->deduct_balance($user_id, $amount);
 
         // Setup Xendit
-        Configuration::setXenditKey($this->config->item('xendit_api_key'));
+        Configuration::setXenditKey($_ENV['XENDIT_API_KEY']);
         $apiInstance = new PayoutApi();
         $idempotency_key = 'WD-' . uniqid();
 

@@ -46,7 +46,10 @@ class AuthPage extends CI_Controller {
     $email    = $this->input->post('email');
     $phone    = $this->input->post('phone');
     $role     = $this->input->post('role');
+    $ref_code = $this->input->post('ref_code') ?? '';
     $password = $this->input->post('password');
+
+    
 
     $years_experience = $this->input->post('years_experience') ?? '';
     $specialties      = $this->input->post('specialties') ?? '';
@@ -60,6 +63,7 @@ class AuthPage extends CI_Controller {
         'phone'    => $phone,
         'role'     => $role,
         'password' => $password,
+        'ref_code' => $ref_code
     ];
 
     $result  = $this->request(base_url('Api/Auth/register'), $post_data);

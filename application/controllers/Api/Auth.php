@@ -38,10 +38,11 @@ class Auth extends CI_Controller {
         }
 
         $name = strtolower(trim($data['name']));
+        $ref_code = $data['ref_code'] ?? '';
         $email = strtolower(trim($data['email']));
         $phone = strtolower(trim($data['phone']));
         $role = strtolower(trim($data['role']));
-        $pass = strtolower(trim($data['password']));
+        $pass = $data['password'];
 
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -77,8 +78,9 @@ class Auth extends CI_Controller {
 
         // Ambil referrer dari session
         $referrer_id = null;
-        if ($this->session->userdata('referral_code')) {
-            $ref_code = $this->session->userdata('referral_code');
+        if ($ref_code) {
+        
+            // $ref_code_session = $ref_code;
             $referrer = $this->user->get_by_ref_code($ref_code);
             if ($referrer) {
                 $referrer_id = $referrer->id;

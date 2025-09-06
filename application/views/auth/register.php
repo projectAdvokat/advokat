@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- penting buat responsive -->
   <title>Register</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.css" rel="stylesheet" type="text/css" />
 </head>
@@ -11,12 +12,16 @@
 
   <div class="card w-full max-w-md shadow-xl bg-base-100 p-6 md:p-8">
     <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
+    <?php
+    // var_dump($this->input->get('ref'));
+    ?>
 
     <form id="registerForm" class="space-y-4" method="post" action="api/register">
       <input type="text" name="name" id="name" placeholder="Nama Lengkap" class="input input-bordered w-full" required />
       <input type="email" name="email" id="email" placeholder="Email" class="input input-bordered w-full" required />
       <input type="text" name="phone" id="phone" placeholder="Nomor Telepon" class="input input-bordered w-full" required />
-
+      <input type="hidden" name="ref_code"  value="<?= $this->input->get('ref') ?>">
+      
       <select id="role" name="role" class="select select-bordered w-full" required>
         <option value="" disabled selected>Pilih Role</option>
         <option value="client">Client</option>

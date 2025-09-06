@@ -134,7 +134,7 @@ class Booking extends CI_Controller {
     $total = $price * $quantity;
 
     // Set Xendit API Key
-    Configuration::setXenditKey($this->config->item('xendit_api_key'));
+    Configuration::setXenditKey($_ENV['XENDIT_API_KEY']);
 
     try {
         $params = [
@@ -193,7 +193,7 @@ public function xendit_webhook() {
     $webhook_data = json_decode($raw_input, true);
 
     // Verifikasi signature
-    $callback_token   = $this->config->item('xendit_callback_token');
+    $callback_token   = $_ENV['XENDIT_CALLBACK_TOKEN'] ?? '';
     $xendit_signature = $_SERVER['HTTP_X_CALLBACK_TOKEN'] ?? '';
 
     if ($callback_token && $xendit_signature !== $callback_token) {
