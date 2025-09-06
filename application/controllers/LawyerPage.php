@@ -22,9 +22,12 @@ class LawyerPage extends CI_Controller {
     public function booking($lawyer_id)
 
     {
-        $lawyer = api_get('/api/lawyer/show/'.$lawyer_id);
+        $this->load->model('Lawyer_Model', 'lawyers');
+        $lawyer = $lawyers->get_by_id($lawyer_id);
+        // $lawyer = api_get('/api/lawyer/show/'.$lawyer_id);
+
         
-        $this->load->view('lawyer/booking', ['lawyer' => $lawyer['data']]);
+        $this->load->view('lawyer/booking', ['lawyer' => $lawyer]);
 
     }
 }
