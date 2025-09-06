@@ -160,7 +160,7 @@
 
         <p class="text-center mt-6 text-gray-700">
           Belum punya akun?
-          <a href="<?= site_url('auth/register') ?>" class="text-green-600 font-medium hover:text-green-800 hover:underline transition-colors">Daftar sekarang</a>
+          <a href="<?= site_url('register') ?>" class="text-green-600 font-medium hover:text-green-800 hover:underline transition-colors">Daftar sekarang</a>
         </p>
       </div>
     </div>

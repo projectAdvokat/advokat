@@ -60,6 +60,8 @@ $route['register']['get']    = 'AuthPage/register';
 $route['logout']['get'] = 'Api/Auth/logout';
 // $route['register'] = '';
 
+$route['api/register']['POST'] = 'AuthPage/regis';
+
 // admin
 
 $route['dashboard/users']['get']      = 'Dashboard/AllUsers';

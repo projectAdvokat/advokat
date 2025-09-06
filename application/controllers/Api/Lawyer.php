@@ -57,5 +57,10 @@ class Lawyer extends CI_Controller {
         
 
     }
+
+    public function reg_lawyer_detail()
+    {
+
+    }
     
 }
