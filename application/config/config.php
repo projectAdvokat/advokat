@@ -39,7 +39,7 @@ $config['xendit_callback_token'] = 'XYXDoShEhsxsDJTh5WdyvHKapYvYIMm1Te5JkvlBsVkB
 // $config['base_url'] = 'https://advokat.japrime.id/';
 // $config['base_url'] = 'https://advokat.japrime.id';
 
-$config['base_url'] = 'http://localhost/advokat';
+$config['base_url'] = $_ENV['BASE_URL'] ?? 'http://localhost/advokat/';
 
 /*
 |--------------------------------------------------------------------------
