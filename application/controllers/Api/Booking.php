@@ -189,6 +189,10 @@ class Booking extends CI_Controller {
 
 // Webhook handler untuk Xendit (PENTING!)
 public function xendit_webhook() {
+    $this->load->model('Referral_Config_Model', 'referral_config');
+    $this->load->model('User_Model', 'user');
+    $this->load->model('Commisions_Model', 'commisions');
+
     $raw_input = file_get_contents("php://input");
     $webhook_data = json_decode($raw_input, true);
 
@@ -223,9 +227,53 @@ public function xendit_webhook() {
             'booking_id' => $booking['id'],
         ];
         $this->chat_model->insert($chat_data);
+        // Komisi
+           $config = $this->referral_config->get_all(); 
+            $gross  = $amount;
+              $platform_fee = $gross * $config['platform_fee_pct'] / 100;
+        $company_amt  = $platform_fee * $config['company_pct_of_fee'] / 100;
+        $ref_pool     = $platform_fee - $company_amt;
+         $l1_amt = $ref_pool * $config['l1_pct_of_pool'] / 100;
+        $l2_amt = $ref_pool * $config['l2_pct_of_pool'] / 100;
+        $l3_amt = $ref_pool * $config['l3_pct_of_pool'] / 100;
+        $lawyer_amt = $gross - $platform_fee;
+        $client   = $this->user->get_by_id($booking['client_id']);
+        $l1_user  = $client['referrer_id'] ?? null;
+        $l2_user  = $l1_user ? $this->user->get_referrer_id($l1_user) : null;
+        $l3_user  = $l2_user ? $this->user->get_referrer_id($l2_user) : null;
+
 
         // Update wallet lawyer
-        $this->wallet->update_balance($booking['lawyer_id'], $amount);
+   $this->wallet->update_balance($booking['lawyer_id'], $lawyer_amt);
+        // Company (kalau kamu pakai user_id khusus misal 1)
+        $this->wallet->update_balance(1, $company_amt);
+
+        // Referral L1-L3
+        if ($l1_user) $this->wallet->update_balance($l1_user, $l1_amt);
+        else $this->wallet->update_balance(1, $l1_amt);
+
+        if ($l2_user) $this->wallet->update_balance($l2_user, $l2_amt);
+        else $this->wallet->update_balance(1, $l2_amt);
+
+        if ($l3_user) $this->wallet->update_balance($l3_user, $l3_amt);
+        else $this->wallet->update_balance(1, $l3_amt);
+
+           $this->commissions->insert([
+            'booking_id'     => $booking['id'],
+            'gross_price'    => $gross,
+            'platform_fee'   => $platform_fee,
+            'company_amount' => $company_amt,
+            'l1_user_id'     => $l1_user,
+            'l1_amount'      => $l1_amt,
+            'l2_user_id'     => $l2_user,
+            'l2_amount'      => $l2_amt,
+            'l3_user_id'     => $l3_user,
+            'l3_amount'      => $l3_amt,
+            'created_at'     => date('Y-m-d H:i:s')
+        ]);
+
+        // Update wallet lawyer
+        // $this->wallet->update_balance($booking['lawyer_id'], $amount);
     }
 
     http_response_code(200);

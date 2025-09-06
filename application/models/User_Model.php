@@ -22,6 +22,19 @@ class User_Model extends CI_Model {
                         ->count_all_results($this->table) > 0;
     }
 
+
+     public function get_referrer_id($user_id) {
+        $this->db->select('referrer_id');
+        $this->db->from('users'); // ganti sesuai nama tabel user kamu
+        $this->db->where('id', $user_id);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->row()->referrer_id;
+        }
+
+        return null;
+    }
     public function get_by_email_role($email, $role)
     {
         return $this->db->where('email', $email)
