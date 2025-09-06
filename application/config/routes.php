@@ -110,9 +110,11 @@ $route['api/articles']['GET'] = 'Api/Articles/index';
 $route['api/articles/create']['POST'] = 'Api/Articles/create';
 $route['api/articles/delete/(:any)']['GET'] = 'Api/Articles/delete/$1';
 $route['api/articles/show/(:num)']['GET'] = 'Api/Articles/show/$1';
+$route['articles/show/(:num)']['GET'] = 'ArticlesPage/show/$1';
+
 $route['dashboard/articles']['GET'] = 'Dashboard/MyArticles';  
 $route['dashboard/articles/create']['GET'] = 'Dashboard/create';
-$route['dashboard/edit/(:any)']['GET'] = 'Dashboard/get_by_slug/$1';
+$route['dashboard/articles/edit/(:any)']['GET'] = 'Dashboard/get_by_slug/$1';
 $route['dashboard/articles/update/(:any)']['POST'] = 'Dashboard/update_article/$1';
 $route['articles']['GET'] = 'ArticlesPage/index';  
 $route['dashboard/articles/store']['POST'] = 'Dashboard/store';

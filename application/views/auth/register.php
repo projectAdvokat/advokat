@@ -2,16 +2,17 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- penting buat responsive -->
   <title>Register</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.css" rel="stylesheet" type="text/css" />
 </head>
-<body class="min-h-screen bg-base-200 flex items-center justify-center">
+<body class="min-h-screen bg-base-200 flex items-center justify-center p-4">
 
-  <div class="card w-full max-w-md shadow-xl bg-base-100 p-6">
-    <h2 class="text-2xl font-bold text-center mb-4">Register</h2>
+  <div class="card w-full max-w-md shadow-xl bg-base-100 p-6 md:p-8">
+    <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
 
-    <form id="registerForm" class="space-y-3" method="post" action="api/register">
+    <form id="registerForm" class="space-y-4" method="post" action="api/register">
       <input type="text" name="name" id="name" placeholder="Nama Lengkap" class="input input-bordered w-full" required />
       <input type="email" name="email" id="email" placeholder="Email" class="input input-bordered w-full" required />
       <input type="text" name="phone" id="phone" placeholder="Nomor Telepon" class="input input-bordered w-full" required />
@@ -35,7 +36,7 @@
       <button type="submit" class="btn btn-primary w-full">Daftar</button>
     </form>
 
-    <div id="message" class="mt-4 text-center"></div>
+    <div id="message" class="mt-4 text-center text-sm md:text-base"></div>
   </div>
 
 <script>
@@ -72,7 +73,6 @@
     }
   });
 </script>
-
 
 </body>
 </html>

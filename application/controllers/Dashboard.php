@@ -353,11 +353,20 @@ $config['next_link'] = 'Next »';
     }
 
     if (!empty($article['cover_url'])) {
-        $filePath = FCPATH . str_replace(base_url(), '', $article['cover_url']);
+        // Kalau yang disimpan di DB hanya nama file
+        $filePath = FCPATH . 'uploads/articles/' . $article['cover_url'];
+
+        // Kalau yang disimpan URL penuh
+        if (filter_var($article['cover_url'], FILTER_VALIDATE_URL)) {
+            $fileName = basename($article['cover_url']); 
+            $filePath = FCPATH . 'uploads/articles/' . $fileName;
+        }
+
         if (file_exists($filePath)) {
-            @unlink($filePath);
+            unlink($filePath);
         }
     }
+
 
     $deleted = $this->Article_Model->delete_by_slug($slug);
 
@@ -426,6 +435,7 @@ public function update_article($id)
             show_error("Upload gagal: $error");
         }
     }
+    
     
 
     // Data untuk API
