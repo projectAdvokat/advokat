@@ -6,6 +6,7 @@ class ArticlesPage extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->library('session');
         // $this->load->model('Article_Model', 'article');
     }
 
@@ -19,7 +20,7 @@ class ArticlesPage extends CI_Controller {
         $article = api_get('api/articles/show/'.$id)['data'];
 
         
-        $this->load->view('articles/show', ['article' => $article,'id'=>$id]);
+        $this->load->view('articles/show', ['article' => $article,'id'=>$id, 'user_role' => $this->session->userdata('user_role')]);
     }
 
 }
