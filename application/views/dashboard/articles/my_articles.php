@@ -15,11 +15,27 @@
             
             <!-- Cover Image -->
             <?php if (!empty($article['cover_url'])): ?>
-              <img src="<?= base_url('uploads/articles/'.$article['cover_url']); ?>" 
-                   class="card-img-top" 
-                   style="height: 200px; object-fit: cover;" 
-                   alt="<?= htmlspecialchars($article['title']); ?>">
+              <div class="position-relative">
+                <img src="<?= base_url('uploads/articles/'.$article['cover_url']); ?>" 
+                    class="card-img-top" 
+                    style="height: 200px; object-fit: cover;" 
+                    alt="<?= htmlspecialchars($article['title']); ?>">
+
+                <!-- Tombol Edit -->
+                <a href="<?= site_url('dashboard/articles/edit/'.$article['slug']); ?>" 
+                  class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 shadow-sm" 
+                  title="Edit Artikel">
+                  <i class="fas fa-edit"></i>
+                </a>
+              </div>
+              <?php else: ?>
+                <a href="<?= site_url('dashboard/articles/edit/'.$article['slug']); ?>" 
+                  class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 shadow-sm" 
+                  title="Edit Artikel">
+                  <i class="fas fa-edit"></i>
+                </a>
             <?php endif; ?>
+
             
             <!-- Card Body -->
             <div class="card-body d-flex flex-column">

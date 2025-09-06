@@ -314,4 +314,18 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
+
+// Load Composer autoload
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require __DIR__ . '/vendor/autoload.php';
+}
+
+// Load .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// var_dump($_ENV, $_SERVER['DB_HOST'], getenv('DB_HOST'));
+// exit;
+
+
 require_once BASEPATH.'core/CodeIgniter.php';

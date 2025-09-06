@@ -321,6 +321,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<span><?= $article['body'] ?> min read</span>
 					</div>
 				</div>
+
+		 <img src="<?= base_url('uploads/articles/' . $article['cover_url']) ?>" class="img-fluid rounded-4" alt="" srcset="">
+
 			</div>
 			
 			<!-- Article Content -->
@@ -334,7 +337,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<i class="bi bi-clock-history"></i>
 				
 				</div>
-				<a href="<?= site_url('articles') ?>" class="btn-back">
+				<?php
+				$back_url  = ($user_role === 'lawyer') ? 'dashboard/articles' : 'articles';
+				?>
+				<a href="<?= site_url($back_url) ?>" class="btn-back">
 					<i class="bi bi-arrow-left"></i> Kembali ke Artikel
 				</a>
 			</div>
