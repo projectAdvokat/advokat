@@ -115,6 +115,7 @@ class Booking extends CI_Controller {
 
     // pay with midtrans
     public function pay($lawyer_id) {
+    $this->load->model('Lawyer_Model', 'lawyer');
     header('Content-Type: application/json');
 
     // baca body JSON dari fetch()
@@ -128,7 +129,7 @@ class Booking extends CI_Controller {
         return;
     }
 
-    $lawyer = api_get('/api/lawyer/show/'.$lawyer_id)['data'];
+    $lawyer =  $this->lawyer->get_by_id($lawyer_id);
     $quantity = ceil($data['duration'] / 30); 
     $price = intval($lawyer['price_30m']);
     $total = $price * $quantity;
