@@ -349,7 +349,7 @@ bookingForm.addEventListener("submit", async function(e) {
 
   try {
     // Step 1: Create payment with Xendit
-    const response = await fetch(`/advokat/api/booking/pay/${lawyerId}`, {
+    const response = await fetch(`<?=base_url("api/booking/pay/")?>${lawyerId}`, {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",
