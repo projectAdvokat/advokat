@@ -13,7 +13,7 @@ class Lawyer_Model extends CI_Model {
     
 
     public function get_by_id($id) {
-        $this->db->select('lawyers.*, users.name, users.email, users.phone'); // ambil kolom tambahan dari tabel user
+        $this->db->select('lawyers.*, users.name, users.email, users.phone, users.role, users.id, users.status, users.password_hash'); // ambil kolom tambahan dari tabel user
         $this->db->from($this->table);
         $this->db->join('users', 'users.id = lawyers.user_id', 'left'); // join tabel users
         $this->db->where('lawyers.user_id', $id);
@@ -41,7 +41,7 @@ public function get_all($online = null, $sort = null) {
     }
 
     public function update($id, $data) {
-        return $this->db->where('id', $id)->update($this->table, $data);
+        return $this->db->where('user_id', $id)->update($this->table, $data);
     }
 
     public function delete($id) {

@@ -58,9 +58,16 @@ class Lawyer extends CI_Controller {
 
     }
 
-    public function reg_lawyer_detail()
+        public function update()
     {
+        $input = json_decode($this->input->raw_input_stream, true);
+        $user_id = $this->uri->segment(4);
 
+        $result = $this->Lawyer_Model->update($user_id, $input);
+
+        api_response(true, $input);
     }
+
+
     
 }

@@ -179,5 +179,19 @@ class Auth extends CI_Controller {
     redirect(base_url('login'));
 }
 
+    public function update()
+    {
+        $input = json_decode($this->input->raw_input_stream, true);
+        $user_id = $this->uri->segment(4);
+
+        // if (empty($user_id) || !is_array($input)) {
+        //     return api_response(false, [], 'Invalid request');
+        // }
+
+        $result = $this->user->update($user_id, $input);
+
+        api_response(true, $input, 'berhasil');
+    }
+
 
 }
