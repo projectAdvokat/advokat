@@ -363,7 +363,7 @@ public function xendit_webhook() {
         else $this->wallet->update_balance(1, $l3_amt);
 
         // ✅ Simpan laporan komisi
-        $this->commisions->insert([
+        $this->commision->insert([
             'booking_id'     => $booking['id'],
             'gross_price'    => $gross,
             'platform_fee'   => $platform_fee,
