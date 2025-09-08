@@ -20,8 +20,7 @@
       <input type="text" name="name" id="name" placeholder="Nama Lengkap" class="input input-bordered w-full" required />
       <input type="email" name="email" id="email" placeholder="Email" class="input input-bordered w-full" required />
       <input type="text" name="phone" id="phone" placeholder="Nomor Telepon" class="input input-bordered w-full" required />
-      <input type="hidden" name="ref_code"  value="<?= $this->input->get('ref') ?>">
-      
+  
       <select id="role" name="role" class="select select-bordered w-full" required>
         <option value="" disabled selected>Pilih Role</option>
         <option value="client">Client</option>
@@ -35,12 +34,13 @@
         <input type="number" name="price_30m" id="price_30m" placeholder="Price per 30 Minutes (Rp)" class="input input-bordered w-full" />
         <textarea id="bio" name="bio" placeholder="Short Bio" class="textarea textarea-bordered w-full"></textarea>
       </div>
-
+      
       <input type="password" name="password" id="password" placeholder="Password" class="input input-bordered w-full" required />
-
+      
+      <input type="text" name="ref_code" id="ref_code" placeholder="Referral Code (optional)" class="input input-bordered w-full"  />
       <button type="submit" class="btn btn-primary w-full">Daftar</button>
     </form>
-
+    
     <div id="message" class="mt-4 text-center text-sm md:text-base"></div>
   </div>
 
