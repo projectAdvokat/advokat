@@ -243,6 +243,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<li><a href="<?= base_url('dashboard') ?>" class="font-medium">Dashboard</a></li>
 					<?php else: ?>
 						<li><a href="<?= base_url('lawyers/list') ?>" class="font-medium">Cari Lawyer</a></li>
+						<li><a href="<?= base_url('chat-room') ?>" class="font-medium">Chat Room</a></li>
 					<?php endif; ?>
 					
 					<!-- User dropdown for desktop -->

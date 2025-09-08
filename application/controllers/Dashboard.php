@@ -162,7 +162,7 @@ $config['next_link'] = 'Next »';
         'Content-Type: application/json',
     ]);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['lawyer_id' => $user_id]));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['user_role' => $user_role, 'user_id' => $user_id]));
 
     $result = curl_exec($ch);
 

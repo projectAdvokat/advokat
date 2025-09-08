@@ -140,3 +140,5 @@ $route['dashboard/booking'] = 'Dashboard/booking';
 $route['booking/success'] = 'Api/Booking/success';
 
 $route ['api/booking/pay/(:num)']['POST'] = 'Api/Booking/pay/$1';
+
+$route['chat-room'] = 'ChatPage/client_chats';

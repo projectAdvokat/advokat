@@ -25,6 +25,15 @@ class Chats_Model extends CI_Model {
     $this->db->order_by('chats.opened_at', 'DESC');
     return $this->db->get()->result_array();
 }
+   public function get_by_client($client_id) {
+    $this->db->select('chats.*, users.name as lawyer_name');
+    $this->db->from($this->table);
+    $this->db->join('users', 'users.id = chats.lawyer_id', 'left'); // ambil nama lawyer
+    $this->db->where('chats.client_id', $client_id); // filter berdasarkan client_id
+    $this->db->order_by('chats.opened_at', 'DESC');
+    return $this->db->get()->result_array();
+}
+
 
     public function get_all() {
         return $this->db->get($this->table)->result_array();

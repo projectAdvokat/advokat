@@ -88,22 +88,26 @@ class Chat extends CI_Controller {
 
 
     $input = json_decode($this->input->raw_input_stream, true);
-    $lawyer_id = isset($input['lawyer_id']) ? intval($input['lawyer_id']) : 0;
+    $user_role  = isset($input['user_role']) ? $input['user_role'] : '';
+    $user_id = isset($input['user_id']) ? intval($input['user_id']) : 0;
 
-    if (!$lawyer_id) {
-        api_response(false, null, 'Parameter lawyer_id wajib diisi');
+    if (!$user_id) {
+        api_response(false, null, 'Parameter user_id wajib diisi');
         return;
     }
 
+
     // validasi benar-benar lawyer
-    $lawyer = $this->db->get_where('users', ['id' => $lawyer_id, 'role' => 'lawyer'])->row_array();
+
+    if($user_role == 'lawyer') {
+     $lawyer = $this->db->get_where('users', ['id' => $user_id, 'role' => 'lawyer'])->row_array();
     if (!$lawyer) {
         api_response(false, null, 'Lawyer tidak ditemukan atau bukan role lawyer');
         return;
     }
 
     // ambil chat dari model
-    $chats = $this->chat->get_by_lawyer($lawyer_id);
+    $chats = $this->chat->get_by_lawyer($user_id);
 
     // tambahin flag expired (jika end_time terisi atau closed_reason ada)
     foreach ($chats as &$chat) {
@@ -113,4 +117,25 @@ class Chat extends CI_Controller {
     api_response(true, $chats, 'berhasil memuat chats');
 
     }
+
+    if($user_role == 'client') {
+        $client = $this->db->get_where('users', ['id' => $user_id, 'role' => 'client'])->row_array();
+        if (!$client) {
+            api_response(false, null, 'Client tidak ditemukan atau bukan role client');
+            return;
+        }
+
+        // ambil chat dari model
+        $chats = $this->chat->get_by_client($user_id);
+
+        // tambahin flag expired
+        foreach ($chats as &$chat) {
+            $chat['expired'] = (!empty($chat['end_time']) || !empty($chat['closed_reason'])) ? true : false;
+        }
+
+        api_response(true, $chats, 'berhasil memuat chats');
+        return;
+    }
+
+}
 }
