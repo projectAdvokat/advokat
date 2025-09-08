@@ -312,13 +312,20 @@ public function xendit_webhook() {
 
     $invoice = json_decode($result, true);
 
-    if (!$invoice || !isset($invoice['status']) || $invoice['status'] !== 'PAID') {
-        http_response_code(200);
-        echo json_encode(['status' => 'ignored', 'message' => 'Invoice not paid']);
-        return;
-    }
+    // if (!$invoice || !isset($invoice['status']) || $invoice['status'] !== 'PAID') {
+    //     http_response_code(200);
+    //     echo json_encode(['status' => 'ignored', 'message' => 'Invoice not paid']);
+    //     return;
+    // }
 
-    $amount = $invoice['amount'];
+
+    // =========
+// INVOICE WEBHOOK HANDLER
+    // =======
+
+    if(isset($webhook_data['id']) && isset($webhook_data['status'])){
+        if($webhook_data['status'] == 'PAID'){
+$amount = $invoice['amount'];
 
     // ✅ Update booking ke paid
     $this->booking->updateByPgRef($invoice_id, 'paid');
@@ -378,6 +385,73 @@ public function xendit_webhook() {
         ]);
     }
 
+        }
+
+        // FIXED  VIRTUAL ACOUNT WEBHOOK
+         if (isset($webhook_data['payment_id']) && isset($webhook_data['bank_code'])) {
+
+                $external_id = $webhook_data['external_id'];
+        $amount      = $webhook_data['amount'];
+    $this->booking->updateByPgRef($external_id, 'paid');
+        $booking = $this->booking->getByInvoiceId($external_id);
+
+        if ($booking) {
+            // Buat chat
+            $this->chat_model->insert([
+                'client_id'  => $booking['client_id'],
+                'lawyer_id'  => $booking['lawyer_id'],
+                'booking_id' => $booking['id'],
+            ]);
+
+            // Tambah saldo lawyer
+            $config = $this->referral_config->get_all(); 
+        $gross  = $amount;
+        $platform_fee = $gross * $config['platform_fee_pct'] / 100;
+        $company_amt  = $platform_fee * $config['company_pct_of_fee'] / 100;
+        $ref_pool     = $platform_fee - $company_amt;
+
+        $l1_amt = $ref_pool * $config['l1_pct_of_pool'] / 100;
+        $l2_amt = $ref_pool * $config['l2_pct_of_pool'] / 100;
+        $l3_amt = $ref_pool * $config['l3_pct_of_pool'] / 100;
+        $lawyer_amt = $gross - $platform_fee;
+
+        $client   = $this->user->get_by_id($booking['client_id']);
+        $l1_user  = $client['referrer_id'] ?? null;
+        $l2_user  = $l1_user ? $this->user->get_referrer_id($l1_user) : null;
+        $l3_user  = $l2_user ? $this->user->get_referrer_id($l2_user) : null;
+
+        // ✅ Update saldo wallet
+        $this->wallet->update_balance($booking['lawyer_id'], $lawyer_amt);
+        $this->wallet->update_balance(1, $company_amt); // perusahaan
+
+        if ($l1_user) $this->wallet->update_balance($l1_user, $l1_amt);
+        else $this->wallet->update_balance(1, $l1_amt);
+
+        if ($l2_user) $this->wallet->update_balance($l2_user, $l2_amt);
+        else $this->wallet->update_balance(1, $l2_amt);
+
+        if ($l3_user) $this->wallet->update_balance($l3_user, $l3_amt);
+        else $this->wallet->update_balance(1, $l3_amt);
+
+        // ✅ Simpan laporan komisi
+        $this->commision->insert([
+            'booking_id'     => $booking['id'],
+            'gross_price'    => $gross,
+            'platform_fee'   => $platform_fee,
+            'company_amount' => $company_amt,
+            'l1_user_id'     => $l1_user,
+            'l1_amount'      => $l1_amt,
+            'l2_user_id'     => $l2_user,
+            'l2_amount'      => $l2_amt,
+            'l3_user_id'     => $l3_user,
+            'l3_amount'      => $l3_amt,
+            'created_at'     => date('Y-m-d H:i:s')
+        ]);
+        }
+         }
+    }
+
+    
     http_response_code(200);
     echo json_encode(['status' => 'success', 'message' => 'Webhook processed via Xendit API']);
 }
