@@ -286,6 +286,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<li><a href="<?= site_url('dashboard') ?>" class="font-medium py-3"><i class="fas fa-tachometer-alt mr-3"></i>Dashboard</a></li>
 				<?php else: ?>
 					<li><a href="<?= site_url('lawyers/list') ?>" class="font-medium py-3"><i class="fas fa-search mr-3"></i>Cari Lawyer</a></li>
+					<li><a href="<?= base_url('chat-room') ?>" class="font-medium">Chat Room</a></li>
 				<?php endif; ?>
 				
 				<!-- Additional menu items for logged in users -->
