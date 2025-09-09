@@ -309,33 +309,57 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</ul>
 	</div>
 
-	<!-- Hero Section -->
 <!-- Hero Section -->
-<section class="hero min-h-screen mt-10" style="background-image: url('<?= base_url('assets/images/hero.jpg'); ?>');">
-  <div class="hero-overlay bg-black bg-opacity-60"></div>
-  <div class="hero-content text-center text-neutral-content px-4">
-    <div class="max-w-2xl lg:max-w-3xl xl:max-w-4xl">
-      <h1 class="mb-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-        Konsultasi Hukum Online Dengan Advokat Terpercaya
-      </h1>
-      <p class="mb-8 text-lg sm:text-xl md:text-2xl opacity-90 max-w-2xl mx-auto leading-relaxed">
-        Solusi hukum cepat, mudah, dan aman langsung dari pengacara berlisensi.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <a href="<?= $this->session->userdata('user_id') ? 'lawyers/list' : 'login' ?>" 
-           class="btn btn-success btn-lg sm:btn-wide md:btn-xl rounded-full px-8 py-3 text-sm sm:text-base md:text-lg font-semibold transition-all duration-300 hover:scale-105">
-          <span>Mulai Konsultasi</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
-        
-      </div>
+<section class="relative min-h-screen flex flex-col justify-center bg-cover bg-center" 
+         style="background-image: url('<?= base_url('assets/images/hero.jpg'); ?>');">
+  
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+
+  <!-- Konten -->
+  <div class="relative z-10 container mx-auto px-6 text-center text-white">
+
+    <!-- Tombol Mulai Konsultasi -->
+    <div class="mb-8 mt-10 pt-5 sm:mb-8 sm:mt-8 text-center"">
+      <a href="<?= $this->session->userdata('user_id') ? site_url('lawyers/list') : site_url('login') ?>" 
+         class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-semibold 
+                rounded-full px-8 py-3 text-lg shadow-lg transition-transform transform hover:scale-105">
+        Mulai Konsultasi
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </a>
     </div>
+
+<!-- Artikel Foreach -->
+<div class="grid gap-4 grid-cols-1 md:grid-cols-2  max-w-4xl mx-auto">
+  <?php if (!empty($latest_articles)): ?>
+    <?php foreach ($latest_articles as $article): ?>
+      <article class="bg-white bg-opacity-10 rounded-xl p-4 text-left shadow-md hover:shadow-xl transition duration-300">
+        <h2 class="text-lg font-bold mb-2">
+          <?= htmlspecialchars($article['title'], ENT_QUOTES, 'UTF-8'); ?>
+        </h2>
+        <p class="text-sm leading-relaxed mb-3">
+          <?= character_limiter(strip_tags($article['body']), 80); ?>
+        </p>
+        <a href="<?= site_url('article/detail/'.$article['id']); ?>" 
+           class="inline-block bg-green-600 hover:bg-green-700 text-white text-xs font-semibold px-3 py-1.5 rounded-full transition-transform transform hover:scale-105">
+          Baca Selengkapnya →
+        </a>
+      </article>
+    <?php endforeach; ?>
+  <?php endif; ?>
+</div>
+
+			<div class="text-center mt-10">
+				<a href="<?= site_url('articles'); ?>" class="btn btn-success btn-outline">Lihat Semua Artikel</a>
+			</div>
+
   </div>
-  
-  
 </section>
+
+
+
 
 	<!-- Why Choose Us -->
 	<section id="features" class="py-16 bg-white	">
@@ -434,33 +458,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</div>
 			<div class="text-center mt-10">
 				<a href="<?= site_url('lawyers/list') ?>" class="btn btn-success btn-outline">Lihat Semua Lawyer</a>
-			</div>
-		</div>
-	</section>
-
-	<!-- Articles Section -->
-	<section class="py-16 bg-base-200">
-		<div class="container mx-auto px-4 ">
-			<h2 class="text-3xl font-bold text-center mb-12 ">Artikel Terbaru</h2>
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-				<?php foreach ($latest_articles as $article): ?>
-				<div class="article-card card bg-white shadow-md border border-gray-100">
-					<div class="card-body p-6">
-						<h3 class="font-bold text-lg mb-3"><?= $article['title']; ?></h3>
-						<p class="text-gray-600 text-sm mb-4">
-							<?= character_limiter(strip_tags($article['body']), 100); ?>
-						</p>
-						<div class="card-actions justify-end">
-							<a href="<?= site_url('article/detail/'.$article['id']); ?>" class="btn btn-success btn-sm">
-								Baca Selengkapnya
-							</a>
-						</div>
-					</div>
-				</div>
-				<?php endforeach; ?>
-			</div>
-			<div class="text-center mt-10">
-				<a href="<?= site_url('articles'); ?>" class="btn btn-success btn-outline">Lihat Semua Artikel</a>
 			</div>
 		</div>
 	</section>
