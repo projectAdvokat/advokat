@@ -120,6 +120,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			align-items: center;
 			gap: 0.5rem;
 		}
+
+		.btn-back {
+			background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+			color: white;
+			border: none;
+			border-radius: 10px;
+			padding: 0.75rem 1.5rem;
+			font-weight: 500;
+			transition: all 0.3s ease;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+		
+		.btn-back:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+			color: white;
+		}
 		
 		.btn-add-article:hover {
 			transform: translateY(-2px);
@@ -203,6 +223,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<p class="text-muted mt-2">Temukan artikel dan informasi hukum terbaru dari advokat profesional</p>
 		</div>
 		
+		<?php
+		$user_role = $this->session->userdata('user_role') ?? '';
+				$back_url  = ($user_role === 'lawyer') ? 'dashboard/articles' : 'articles';
+				$back_url = ($user_role === '') ? '' : $back_url;
+				?>
+				<a href="<?= site_url($back_url) ?>" class="btn-back">
+					<i class="bi bi-arrow-left"></i> Kembali ke Artikel
+				</a>
 	</div>
 
 	<!-- Articles Grid -->
