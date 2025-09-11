@@ -120,8 +120,8 @@
 
         <form method="post" action="<?= site_url('AuthPage/filter') ?>" class="space-y-5 mt-6">
           <div class="floating-label">
-            <input type="email" name="email" class="floating-input w-full" placeholder=" " required>
-            <label class="floating-label-text">Alamat Email</label>
+            <input type="text" name="phone" class="floating-input w-full" placeholder="08xxxxxxxxx" required>
+            <label class="floating-label-text">Nomor Telepon</label>
             <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
               <!-- <i class="fas fa-envelope"></i> -->
             </div>

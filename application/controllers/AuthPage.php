@@ -118,7 +118,7 @@ class AuthPage extends CI_Controller {
     public function filter()
     {
         if ($this->input->method() === 'post') {
-            $email = $this->input->post('email');
+            $phone = $this->input->post('phone');
             $password = $this->input->post('password');
 
             // kirim ke API Auth/login
@@ -127,7 +127,7 @@ class AuthPage extends CI_Controller {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-                'email' => $email,
+                'phone' => $phone,
                 'password' => $password
             ]));
             $response = curl_exec($ch);

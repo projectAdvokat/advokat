@@ -134,16 +134,16 @@ class Auth extends CI_Controller {
     public function login()
     {
         // input post non json
-            $email = $this->input->post('email');
+            $phone = $this->input->post('phone');
     $password = $this->input->post('password');
 
 
-        if (!isset($email, $password)) {
+        if (!isset($phone, $password)) {
             echo json_encode(['status' => false, 'message' => 'Invalid payload']);
             return;
         }
 
-        $user = $this->user->get_by_email($email);
+        $user = $this->user->get_by_phone($phone);
         if (!$user) {
             echo json_encode(['status' => false, 'message' => 'User tidak ditemukan']);
             return;

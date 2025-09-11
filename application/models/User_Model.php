@@ -47,6 +47,11 @@ class User_Model extends CI_Model {
         return $this->db->where('email', $email)
                         ->get($this->table)->row();
     }
+    public function get_by_phone($phone)
+    {
+        return $this->db->where('phone', $phone)
+                        ->get($this->table)->row();
+    }
 
     public function get_by_ref_code($ref_code)
     {
