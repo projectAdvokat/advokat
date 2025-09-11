@@ -67,7 +67,7 @@
 
     if (status !== null) {
       if (status) {
-        msgEl.innerHTML = `<p class="text-green-600">✅ ${message}. Silakan login.</p>`;
+        msgEl.innerHTML = `<p class="text-green-600">✅ Register berhasil. Silakan login.</p>`;
         // kasih delay 2 detik biar pesan terlihat
         setTimeout(() => {
           window.location.href = "<?= site_url('login') ?>";
